@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import source from './ormconfig';
 import { HttpExceptionFilter } from './libs/errors/http-exception.filter';
 import { TypeormErrorFilter } from './libs/errors/typeorm.error.filter';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 // import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 // import serverConfig from './libs/serverConfig/serverConfig';
 // const port = serverConfig.port;
@@ -39,17 +39,9 @@ async function bootstrap() {
 
   app.enableCors();
 
-  // app.connectMicroservice<MicroserviceOptions>(
-  //   {
-  //     transport: Transport.TCP,
-  //     options: {
-  //       host: serverConfig.ECOMMERCE_IP,
-  //       port: serverConfig.ECOMMERCE_PORT,
-  //     },
-  //   },
-  //   { inheritAppConfig: true },
-  // );
-  // app.startAllMicroservices();
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
   await app.listen(process.env.APP_PORT || 3000);
 }
 bootstrap();

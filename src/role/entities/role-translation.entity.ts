@@ -10,7 +10,7 @@ import { RoleEntity } from './role.entity';
 
 @Entity({ name: 'role_translations' })
 @Unique(['lang', 'roleId'])
-export class RoleTrEntity {
+export class RoleTranslationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,7 +18,7 @@ export class RoleTrEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  shortDescription: string;
+  description: string;
 
   @Column({ type: 'longtext', nullable: true })
   longDescription: string;

@@ -1,19 +1,17 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Not, Repository } from 'typeorm';
-import { ApiResponse } from '../libs/errors/api-response';
-import { RoleEntity } from './entities/role.entity';
-import { RoleTrEntity } from './entities/role-tr.entity';
-import source from '../ormconfig';
-import { RoleResource } from './role.resource';
-import { calculateRoleTaxes } from '../libs/utils/methods';
+import { ApiResponse } from '../../libs/errors/api-response';
+import { RoleEntity } from '../entities/role.entity';
+import { RoleTranslationEntity } from "../entities/role-translation.entity";
+import { RoleResource } from '../resources/role.resource';
 import { NotFoundException } from "@nestjs/common";
 
 export class RoleService {
   constructor(
     @InjectRepository(RoleEntity)
     private repo: Repository<RoleEntity>,
-    @InjectRepository(RoleTrEntity)
-    private roleTrRepository: Repository<RoleTrEntity>,
+    @InjectRepository(RoleTranslationEntity)
+    private roleTranslationRepository: Repository<RoleTranslationEntity>,
   ) {}
 
   async findAll(query) {
@@ -62,12 +60,12 @@ export class RoleService {
     );
   }
 
-  async search(roleName) {
+  async search(name) {
     let roles: any = await this.repo.find({
-      select: ['id', 'mainImage'],
+      select: ['id'],
       where: {
         translations: {
-          name: Like(`%${roleName}%`),
+          name: Like(`%${name}%`),
         },
       },
       relations: {
@@ -78,9 +76,6 @@ export class RoleService {
       return {
         id: role['id'],
         name: role['name'],
-        category: role['category']['name'],
-        mainImage:
-          process.env.dashboard_base_url + 'storage/Images/' + role['mainImage'],
       };
     });
 

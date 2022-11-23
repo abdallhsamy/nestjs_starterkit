@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { RoleTrEntity } from './role-tr.entity';
+import { RoleTranslationEntity } from './role-translation.entity';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { translation } from '../../libs/utils/database';
 
@@ -19,24 +19,6 @@ import { translation } from '../../libs/utils/database';
 export class RoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ type: 'varchar', length: 255 })
-  mainImage: string;
-
-  @Column({ type: 'text' })
-  images: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  sku: string;
-
-  @Column({ type: 'integer' })
-  stockQuantity: string;
-
-  @Column({ type: 'tinyint', default: 1 })
-  status: number;
-
-  @Column('decimal', { precision: 4, scale: 2, default: 0 })
-  rate: number;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
   public created_at: Date;
@@ -53,12 +35,12 @@ export class RoleEntity {
 
   @Exclude()
   @OneToMany(
-    (type) => RoleTrEntity,
-    (roleTrEntity: RoleTrEntity) => roleTrEntity.role,
+    (type) => RoleTranslationEntity,
+    (roleTranslationEntity: RoleTranslationEntity) => roleTranslationEntity.role,
     { eager: true },
   )
   @JoinColumn({ name: 'parentId' })
-  translations: RoleTrEntity[];
+  translations: RoleTranslationEntity[];
 
   @Expose()
   get name() {
@@ -66,8 +48,8 @@ export class RoleEntity {
   }
 
   @Expose()
-  get shortDescription() {
-    return translation('shortDescription', this.translations);
+  get description() {
+    return translation('description', this.translations);
   }
 
   @Expose()

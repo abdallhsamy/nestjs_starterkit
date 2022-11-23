@@ -1,10 +1,5 @@
-import { RoleEntity } from './entities/role.entity';
-import { ResourceResponse } from '../libs/classes/resource-response';
-import {
-  calculateRoleTaxes,
-  getAvailableTaxes, getImageBasePath,
-} from '../libs/utils/methods';
-import { Transform } from 'class-transformer';
+import { RoleEntity } from '../entities/role.entity';
+import { ResourceResponse } from '../../libs/classes/resource-response';
 
 export class RoleResource extends ResourceResponse {
   static single(role: RoleEntity) {
