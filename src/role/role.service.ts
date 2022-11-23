@@ -6,11 +6,12 @@ import { RoleTrEntity } from './entities/role-tr.entity';
 import source from '../ormconfig';
 import { RoleResource } from './role.resource';
 import { calculateRoleTaxes } from '../libs/utils/methods';
+import { NotFoundException } from "@nestjs/common";
 
 export class RoleService {
   constructor(
     @InjectRepository(RoleEntity)
-    private roleRepository: Repository<RoleEntity>,
+    private repo: Repository<RoleEntity>,
     @InjectRepository(RoleTrEntity)
     private roleTrRepository: Repository<RoleTrEntity>,
   ) {}
@@ -18,19 +19,14 @@ export class RoleService {
   async findAll(query) {
     let filter = {};
 
-    if (query['category']) filter['categoryId'] = query['category'];
-
-    if (query['tag']) filter['tags'] = { id: query['tag'] };
-
-    if (query['name'])
+    if (query['name']) {
       filter['translations'] = { name: Like(`%${query['name']}%`) };
+    }
 
     const perPage = 8;
-    const [roles, total] = await this.roleRepository.findAndCount({
+    const [roles, total] = await this.repo.findAndCount({
       where: filter,
       order: { [query['sort_key'] ?? 'id']: query['sort_type'] ?? 'asc' },
-      relations: {
-      },
       take: perPage,
       skip: ((query['page'] ?? 1) - 1) * perPage,
     });
@@ -41,28 +37,23 @@ export class RoleService {
       total,
     };
 
-    return ApiResponse.successResponse(
-      'all roles',
-      { roles: RoleResource.collection(roles), meta },
-      200,
-    );
+    return { data: RoleResource.collection(roles), meta };
   }
 
-  async findOne(id: number) {
-    const role = await this.roleRepository.findOne({
+  async findOne(id?: number) {
+    if (!id || isNaN(id)) {
+      throw NotFoundException;
+    }
+    const role = await this.repo.findOne({
       where: {
-        id,
-      },
-      relations: {
+        id : id,
       },
     });
 
-    role['related_roles'] = await this.roleRepository.find({
-      where: { categoryId: role['categoryId'], id: Not(id) },
-      relations: {
-      },
-      take: 6,
-    });
+    if(!role){
+      throw new NotFoundException(`there is nor role with id ${id}`)
+    }
+
 
     return ApiResponse.successResponse(
       'role',
@@ -72,8 +63,8 @@ export class RoleService {
   }
 
   async search(roleName) {
-    let roles: any = await this.roleRepository.find({
-      select: ['id', 'mainImage', 'categoryId'],
+    let roles: any = await this.repo.find({
+      select: ['id', 'mainImage'],
       where: {
         translations: {
           name: Like(`%${roleName}%`),
@@ -88,7 +79,6 @@ export class RoleService {
         id: role['id'],
         name: role['name'],
         category: role['category']['name'],
-        price: +role['price'] + calculateRoleTaxes(role['price']),
         mainImage:
           process.env.dashboard_base_url + 'storage/Images/' + role['mainImage'],
       };

@@ -38,9 +38,6 @@ export class RoleEntity {
   @Column('decimal', { precision: 4, scale: 2, default: 0 })
   rate: number;
 
-  @Column({ type: 'bigint' })
-  categoryId: number;
-
   @CreateDateColumn({ name: 'created_at', nullable: true })
   public created_at: Date;
 

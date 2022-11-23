@@ -8,25 +8,26 @@ import {
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 
-@Controller()
-export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+@Controller('roles')
+export class RoleController
+{
+  constructor(private readonly service: RoleService) {}
 
-  @Get('roles/search/:name')
+  @Get('search/:name')
   @UseInterceptors(ClassSerializerInterceptor)
   search(@Param('name') roleName) {
-    return this.roleService.search(roleName);
+    return this.service.search(roleName);
   }
 
-  @Get('roles')
+  @Get('/')
   @UseInterceptors(ClassSerializerInterceptor)
   findAll(@Query() query) {
-    return this.roleService.findAll(query);
+    return this.service.findAll(query);
   }
 
-  @Get('roles/:id')
+  @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('id') id) {
-    return this.roleService.findOne(+id);
+    return this.service.findOne(+id);
   }
 }
