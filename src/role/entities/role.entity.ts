@@ -51,9 +51,4 @@ export class RoleEntity {
   get description() {
     return translation('description', this.translations);
   }
-
-  @Expose()
-  get longDescription() {
-    return translation('longDescription', this.translations);
-  }
 }

@@ -9,7 +9,7 @@ import {
 import { RoleEntity } from './role.entity';
 
 @Entity({ name: 'role_translations' })
-@Unique(['lang', 'roleId'])
+@Unique(['lang', 'role_id'])
 export class RoleTranslationEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,11 +20,8 @@ export class RoleTranslationEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   description: string;
 
-  @Column({ type: 'longtext', nullable: true })
-  longDescription: string;
-
   @Column()
-  roleId: number;
+  role_id: number;
 
   @Column({ type: 'varchar', length: 10 })
   lang: string;
@@ -34,6 +31,6 @@ export class RoleTranslationEntity {
     (role: RoleEntity) => role.translations,
     { onDelete: 'CASCADE' },
   )
-  @JoinColumn({ name: 'roleId' })
+  @JoinColumn({ name: 'role_id' })
   role: RoleEntity;
 }
