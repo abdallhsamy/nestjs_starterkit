@@ -94,4 +94,8 @@ export class RoleService {
 
     return ApiResponse.successResponse('roles', roles, 200);
   }
+
+  async softDelete(id: number) {
+    return await this.roleRepo.softDelete(id);
+  }
 }

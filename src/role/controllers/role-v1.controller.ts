@@ -4,7 +4,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  Query, ParseIntPipe, Post, Body, Res, UsePipes, ValidationPipe, Patch
+  Query, ParseIntPipe, Post, Body, Res, UsePipes, ValidationPipe, Patch, Delete
 } from "@nestjs/common";
 import { RoleService } from '../services/role.service';
 import { CreateRoleDto } from "../dto/create-role.dto";
@@ -48,5 +48,10 @@ export class RoleV1Controller
   @UseInterceptors(ClassSerializerInterceptor)
   update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
     return this.service.update(+id, dto);
+  }
+
+  @Delete(':id')
+  softDelete(@Param('id', ParseIntPipe) id) {
+    return this.service.softDelete(+id);
   }
 }
