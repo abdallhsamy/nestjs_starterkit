@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import source from './ormconfig';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './libs/errors/http-exception.filter';
 import { TypeormErrorFilter } from './libs/errors/typeorm.error.filter';
 import { ValidationPipe, VersioningType } from "@nestjs/common";
@@ -44,6 +45,20 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
+  if (configService.get('ENABLE_SWAGGER')) {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Nest.js StarterKit')
+      .setDescription('API Documentation')
+      .setVersion('0.0.1')
+      .addBearerAuth()
+      .addTag('Starter kit')
+      .build();
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('docs', app, document);
+  }
+
+
   await app.listen(configService.get('APP_PORT',3000));
 }
 bootstrap();
