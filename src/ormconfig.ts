@@ -1,20 +1,16 @@
 import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
-import { config } from 'dotenv';
-
-config();
-const configService = new ConfigService();
+import config from './config';
 
 export let ormOptions   :any = {
   type: 'mysql',
-  host: configService.get('DATABASE_HOST'),
-  port: configService.get('DATABASE_PORT', 3306),
-  username: configService.get('DATABASE_USERNAME'),
-  password: configService.get('DATABASE_PASSWORD'),
-  database: configService.get('DATABASE_NAME'),
+  host: config('database.db_host'),
+  port: config('database.db_port'),
+  username: config('database.db_username'),
+  password: config('database.db_password'),
+  database: config('database.db_name'),
   entities: [ __dirname + '/**/entities/*.entity{.ts,.js}'],
-  synchronize: configService.get('DATABASE_SYNCHRONIZE', false),
-  logging: configService.get('LOG_DATABASE_QUERIES', false)
+  synchronize: config('database.sync'),
+  logging: config('database.loq_queries')
 }
 const source = new DataSource(ormOptions);
 export default source;

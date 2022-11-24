@@ -6,6 +6,7 @@ import { HttpExceptionFilter } from './libs/errors/http-exception.filter';
 import { TypeormErrorFilter } from './libs/errors/typeorm.error.filter';
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import config from "@src/config";
 // import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 // import serverConfig from './libs/serverConfig/serverConfig';
 // const port = serverConfig.port;
@@ -46,7 +47,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  if (configService.get('ENABLE_SWAGGER')) {
+  if (!!config('app.enable_swagger')) { // todo : if condition always true
     const swaggerConfig = new DocumentBuilder()
       .setTitle('Nest.js StarterKit')
       .setDescription('API Documentation')
@@ -59,6 +60,6 @@ async function bootstrap() {
   }
 
 
-  await app.listen(configService.get('APP_PORT',3000));
+  await app.listen(config('app.port'));
 }
 bootstrap();
