@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { unauthorized } from '@src/app/constants/swagger.constants';
+import { unauthorized } from "@src/constants/swagger.const";
 
 export const findAll = {
   req: {
