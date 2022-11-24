@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Not, Repository } from 'typeorm';
-import { ApiResponse } from "@src/libs/errors/api-response";
+import { ApiResponse } from '@src/libs/errors/api-response';
 import { PermissionEntity } from '../entities/permission.entity';
 import { PermissionResource } from '../resources/permission.resource.js';
-import { NotFoundException } from "@nestjs/common";
-import { CreatePermissionDto } from "../dto/create-permission.dto";
-import { UpdatePermissionDto } from "../dto/update-permission.dto";
+import { NotFoundException } from '@nestjs/common';
+import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { UpdatePermissionDto } from '../dto/update-permission.dto';
 
 export class PermissionService {
   constructor(
@@ -14,7 +14,7 @@ export class PermissionService {
   ) {}
 
   async findAll(query) {
-    let filter = {};
+    const filter = {};
 
     // if (query['name']) {
     //   filter['translations'] = { name: Like(`%${query['name']}%`) };
@@ -38,34 +38,43 @@ export class PermissionService {
   }
 
   async create(dto: CreatePermissionDto) {
-
-    const permission = this.permissionRepo.create( dto );
+    const permission = this.permissionRepo.create(dto);
 
     await this.permissionRepo.save(permission);
 
     // todo : attach roles
 
-    return await this.findOne( permission.id);
+    return await this.findOne(permission.id);
   }
 
   async findOne(id?: number) {
-
-    const permission = await this.permissionRepo.findOneBy({ id : id, })
-      .then(value => {if (! value) {throw new NotFoundException();} return value;});
+    const permission = await this.permissionRepo
+      .findOneBy({ id: id })
+      .then((value) => {
+        if (!value) {
+          throw new NotFoundException();
+        }
+        return value;
+      });
 
     return PermissionResource.single(permission);
   }
 
   async update(id: number, updatePermissionDto: UpdatePermissionDto) {
+    const permission = await this.permissionRepo
+      .findOneBy({ id: id })
+      .then((value) => {
+        if (!value) {
+          throw new NotFoundException();
+        }
+        return value;
+      });
 
-    const permission = await this.permissionRepo.findOneBy({ id : id, })
-      .then(value => {if (! value) {throw new NotFoundException();} return value;});
-
-    await this.permissionRepo.update({id}, { } );
+    await this.permissionRepo.update({ id }, {});
 
     // todo : update roles if provided
 
-    return await this.findOne( id );
+    return await this.findOne(id);
   }
 
   async search(name) {

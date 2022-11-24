@@ -1,11 +1,10 @@
 import { S3 } from 'aws-sdk';
 import { Logger, Injectable } from '@nestjs/common';
-import { extname } from "path";
+import { extname } from 'path';
 
 @Injectable()
 export class AmazonS3Service {
-
-  generateFileName = ( file ) => {
+  generateFileName = (file) => {
     const name = file.originalname.split('.')[0];
     const fileExtName = extname(file.originalname);
     const randomName = Array(4)
@@ -16,10 +15,13 @@ export class AmazonS3Service {
     return name + randomName + fileExtName;
   };
 
-  async upload(file,directory)
-  {
+  async upload(file, directory) {
     const imageName = this.generateFileName(file);
-    await this.uploadS3(file.buffer, process.env.AWS_S3_BUCKET, 'public/' + directory + '/' + imageName );
+    await this.uploadS3(
+      file.buffer,
+      process.env.AWS_S3_BUCKET,
+      'public/' + directory + '/' + imageName,
+    );
     return directory + '/' + imageName;
   }
 
@@ -29,10 +31,9 @@ export class AmazonS3Service {
       Bucket: bucket,
       Key: String(name),
       Body: file,
-      CreateBucketConfiguration:
-      {
-        LocationConstraint: process.env.AWS_DEFAULT_REGION
-      }
+      CreateBucketConfiguration: {
+        LocationConstraint: process.env.AWS_DEFAULT_REGION,
+      },
     };
     return new Promise((resolve, reject) => {
       s3.upload(params, (err, data) => {
@@ -51,5 +52,4 @@ export class AmazonS3Service {
       secretAccessKey: process.env.AWS_S3_KEY_SECRET,
     });
   }
-
 }

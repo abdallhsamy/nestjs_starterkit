@@ -7,15 +7,15 @@ export const manipulateFiltersParams = (filters: Object): Object => {
 
   if (filters['equals'])
     // check if there are keys sent to be filtered by exact match criteria
-    for (let [key, value] of Object.entries(filters['equals']))
+    for (const [key, value] of Object.entries(filters['equals']))
       manipulatedFilters[key] = value;
 
   if (filters['likes'])
     // check if there are keys sent to be filtered by some match criteria ( where like )
-    for (let [key, value] of Object.entries(filters['likes']))
+    for (const [key, value] of Object.entries(filters['likes']))
       if (typeof value === 'object')
         // check if the search in nested object ( relation )
-        for (let [k, val] of Object.entries(value))
+        for (const [k, val] of Object.entries(value))
           manipulatedFilters['translations'] = { [k]: Like(`%${val}%`) };
       else manipulatedFilters[key] = value;
 
@@ -28,9 +28,9 @@ export const checkForeignKeyExistence = async (
 ): Promise<Object> => {
   // await source.initialize();
 
-  let errors = {};
+  const errors = {};
 
-  let getResults = new Promise((resolve, reject) => {
+  const getResults = new Promise((resolve, reject) => {
     let index = 0;
 
     entries.forEach(async (entry) => {
@@ -67,9 +67,9 @@ export const translation = (key, translations: any[]) => {
 };
 
 export const isUnique = async (entries: Object[]): Promise<Object> => {
-  let errors = {};
+  const errors = {};
 
-  let getResults = new Promise((resolve, reject) => {
+  const getResults = new Promise((resolve, reject) => {
     let index = 0;
 
     entries.forEach(async (entry) => {

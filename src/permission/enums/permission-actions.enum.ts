@@ -1,5 +1,4 @@
-export enum PermissionActionsEnum
-{
+export enum PermissionActionsEnum {
   create = 'create',
   list_all = 'list_all',
   get_one = 'get_one',

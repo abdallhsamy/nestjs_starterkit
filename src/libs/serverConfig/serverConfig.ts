@@ -1,4 +1,4 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default {
@@ -18,5 +18,5 @@ export default {
   AWS_URL: process.env.AWS_URL,
   AWS_BASE_URL: process.env.AWS_BASE_URL,
   SERVICE_RETRY_ATTEMPTS: '5s',
-  SERVICE_RETRY_DELAY : '1s'
+  SERVICE_RETRY_DELAY: '1s',
 };

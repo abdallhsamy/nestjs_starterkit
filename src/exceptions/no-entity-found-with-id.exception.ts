@@ -1,4 +1,4 @@
-import { TypeORMError } from "../typeorm.error";
+import { TypeORMError } from '../typeorm.error';
 
 export class NoEntityFoundWithId extends TypeORMError {
   constructor(id) {

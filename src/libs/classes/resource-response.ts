@@ -1,8 +1,5 @@
 export class ResourceResponse {
-
-  static whenLoaded( relationship , callback )
-  {
-    if ( relationship )
-      return callback()
+  static whenLoaded(relationship, callback) {
+    if (relationship) return callback();
   }
 }

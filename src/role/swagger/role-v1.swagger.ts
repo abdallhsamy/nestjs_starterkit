@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { unauthorized } from "@src/constants/swagger.const";
+import { unauthorized } from '@src/constants/swagger.const';
 
 export const findAll = {
   req: {
@@ -15,7 +15,7 @@ export const findAll = {
       description: 'Roles are fetched successfully',
     },
     unauthorized,
-  }
+  },
 };
 
 export const findOne = {
@@ -27,11 +27,11 @@ export const findOne = {
   res: {
     ok: {
       status: HttpStatus.OK,
-        description: 'Role is fetched successfully',
+      description: 'Role is fetched successfully',
     },
     unauthorized,
   },
-}
+};
 
 export const create = {
   req: {

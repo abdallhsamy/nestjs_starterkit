@@ -7,15 +7,14 @@ import {
   IsString,
   MaxLength,
   Min,
-  ValidateNested
-} from "class-validator";
-import { Type } from "class-transformer";
-import { isUnique } from "@src/libs/utils/database";
-import { PermissionActionsEnum } from "@src/permission/enums/permission-actions.enum";
-import { exists } from "fs";
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { isUnique } from '@src/libs/utils/database';
+import { PermissionActionsEnum } from '@src/permission/enums/permission-actions.enum';
+import { exists } from 'fs';
 
-export class CreatePermissionDto
-{
+export class CreatePermissionDto {
   @IsString()
   @IsNotEmpty()
   model: string;
@@ -39,8 +38,6 @@ export class CreatePermissionDto
   // @IsNumber( )
   roles: any;
 }
-
-
 
 // export class CreatePermissionTranslationDto {
 //

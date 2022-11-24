@@ -1,13 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Like, Not, Repository } from 'typeorm';
-import { ApiResponse } from '../../libs/errors/api-response';
+import { Like, Repository } from 'typeorm';
+import { ApiResponse } from "@src/libs/errors/api-response";
 import { RoleEntity } from '../entities/role.entity';
-import { RoleTranslationEntity } from "../entities/role-translation.entity";
+import { RoleTranslationEntity } from '../entities/role-translation.entity';
 import { RoleResource } from '../resources/role.resource.js';
-import { NotFoundException } from "@nestjs/common";
-import { CreateRoleDto } from "../dto/create-role.dto";
-import TranslationRepository from "../../libs/repositories/translation.repository";
-import { UpdateRoleDto } from "../dto/update-role.dto";
+import { NotFoundException } from '@nestjs/common';
+import { CreateRoleDto } from '../dto/create-role.dto';
+import TranslationRepository from '../../libs/repositories/translation.repository';
+import { UpdateRoleDto } from '../dto/update-role.dto';
 
 export class RoleService {
   constructor(
@@ -18,7 +18,7 @@ export class RoleService {
   ) {}
 
   async findAll(query) {
-    let filter = {};
+    const filter = {};
 
     if (query['name']) {
       filter['translations'] = { name: Like(`%${query['name']}%`) };
@@ -42,35 +42,49 @@ export class RoleService {
   }
 
   async create(dto: CreateRoleDto) {
-
-    const role = this.roleRepo.create( dto );
+    const role = this.roleRepo.create(dto);
 
     await this.roleRepo.save(role);
 
-    await TranslationRepository
-      .setTranslations( dto.translations , this.roleTranslationRepo , 'role_id' , role.id)
+    await TranslationRepository.setTranslations(
+      dto.translations,
+      this.roleTranslationRepo,
+      'role_id',
+      role.id,
+    );
 
-    return await this.findOne( role.id);
+    return await this.findOne(role.id);
   }
 
   async findOne(id?: number) {
-
-    const role = await this.roleRepo.findOneBy({ id : id, })
-      .then(value => {if (! value) {throw new NotFoundException();} return value;});
+    const role = await this.roleRepo.findOneBy({ id: id }).then((value) => {
+      if (!value) {
+        throw new NotFoundException();
+      }
+      return value;
+    });
 
     return RoleResource.single(role);
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
+    const role = await this.roleRepo.findOneBy({ id: id }).then((value) => {
+      if (!value) {
+        throw new NotFoundException();
+      }
+      return value;
+    });
 
-    const role = await this.roleRepo.findOneBy({ id : id, })
-      .then(value => {if (! value) {throw new NotFoundException();} return value;});
+    await this.roleRepo.update({ id }, {});
 
-    await this.roleRepo.update({id}, { } );
+    await TranslationRepository.updateTranslations(
+      'role_id',
+      id,
+      updateRoleDto.translations,
+      this.roleTranslationRepo,
+    );
 
-    await TranslationRepository.updateTranslations('role_id', id, updateRoleDto.translations , this.roleTranslationRepo )
-
-    return await this.findOne( id );
+    return await this.findOne(id);
   }
 
   async search(name) {
@@ -81,8 +95,7 @@ export class RoleService {
           name: Like(`%${name}%`),
         },
       },
-      relations: {
-      },
+      relations: {},
     });
 
     roles = roles.map((role: RoleEntity) => {

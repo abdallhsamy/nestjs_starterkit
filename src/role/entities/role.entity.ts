@@ -10,15 +10,14 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from "typeorm";
+  UpdateDateColumn,
+} from 'typeorm';
 import { RoleTranslationEntity } from './role-translation.entity';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { translation } from '../../libs/utils/database';
+import { translation } from "@src/libs/utils/database";
 
 @Entity({ name: 'roles' })
-export class RoleEntity extends BaseEntity
-{
+export class RoleEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -38,7 +37,8 @@ export class RoleEntity extends BaseEntity
   @Exclude()
   @OneToMany(
     (type) => RoleTranslationEntity,
-    (roleTranslationEntity: RoleTranslationEntity) => roleTranslationEntity.role,
+    (roleTranslationEntity: RoleTranslationEntity) =>
+      roleTranslationEntity.role,
     { eager: true },
   )
   @JoinColumn({ name: 'parentId' })

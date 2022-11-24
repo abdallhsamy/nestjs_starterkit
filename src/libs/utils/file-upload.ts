@@ -1,8 +1,8 @@
 import { extname } from 'path';
 export const imageFileFilter = (req, file, callback) => {
-
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif|svg)$/))
-    req.fileValidationError = 'only there extensions are allowed jpg,jpeg,png and gif'
+    req.fileValidationError =
+      'only there extensions are allowed jpg,jpeg,png and gif';
 
   callback(null, true);
 };

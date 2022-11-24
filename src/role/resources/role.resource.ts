@@ -4,7 +4,7 @@ import { ResourceResponse } from '../../libs/classes/resource-response';
 export class RoleResource extends ResourceResponse {
   static single(role: RoleEntity) {
     return {
-      data : this.#toArray(role)
+      data: this.#toArray(role),
     };
   }
 

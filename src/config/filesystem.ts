@@ -7,7 +7,5 @@ config();
 const configService = new ConfigService();
 
 export default {
-
-  driver : configService.get('FILE_SYSTEM_DRIVER','local'),
-
-}
+  driver: configService.get('FILE_SYSTEM_DRIVER', 'local'),
+};
