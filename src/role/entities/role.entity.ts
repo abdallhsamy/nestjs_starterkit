@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -9,14 +10,15 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  UpdateDateColumn
+} from "typeorm";
 import { RoleTranslationEntity } from './role-translation.entity';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { translation } from '../../libs/utils/database';
 
 @Entity({ name: 'roles' })
-export class RoleEntity {
+export class RoleEntity extends BaseEntity
+{
   @PrimaryGeneratedColumn()
   id: number;
 

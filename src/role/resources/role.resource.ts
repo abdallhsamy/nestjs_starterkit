@@ -13,8 +13,9 @@ export class RoleResource extends ResourceResponse {
   static #toArray(role: RoleEntity) {
     return {
       id: role['id'],
-      created_at: role['created_at'],
       name: role['name'],
+      description: role['description'],
+      created_at: role['created_at'].toISOString().split('T')[0],
     };
   }
 }

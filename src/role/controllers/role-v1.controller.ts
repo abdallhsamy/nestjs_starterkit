@@ -4,8 +4,8 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  Query,
-} from '@nestjs/common';
+  Query, ParseIntPipe
+} from "@nestjs/common";
 import { RoleService } from '../services/role.service';
 
 @Controller({ path:"roles", version: '1', })
@@ -27,7 +27,7 @@ export class RoleV1Controller
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  findOne(@Param('id') id) {
+  findOne(@Param('id', ParseIntPipe) id) {
     return this.service.findOne(+id);
   }
 }

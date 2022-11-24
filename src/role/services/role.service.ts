@@ -3,15 +3,15 @@ import { IsNull, Like, Not, Repository } from 'typeorm';
 import { ApiResponse } from '../../libs/errors/api-response';
 import { RoleEntity } from '../entities/role.entity';
 import { RoleTranslationEntity } from "../entities/role-translation.entity";
-import { RoleResource } from '../resources/role.resource';
+import { RoleResource } from '../resources/role.resource.js';
 import { NotFoundException } from "@nestjs/common";
 
 export class RoleService {
   constructor(
     @InjectRepository(RoleEntity)
-    private repo: Repository<RoleEntity>,
+    private roleRepo: Repository<RoleEntity>,
     @InjectRepository(RoleTranslationEntity)
-    private roleTranslationRepository: Repository<RoleTranslationEntity>,
+    private roleTranslationRepo: Repository<RoleTranslationEntity>,
   ) {}
 
   async findAll(query) {
@@ -22,7 +22,7 @@ export class RoleService {
     }
 
     const perPage = 8;
-    const [roles, total] = await this.repo.findAndCount({
+    const [roles, total] = await this.roleRepo.findAndCount({
       where: filter,
       order: { [query['sort_key'] ?? 'id']: query['sort_type'] ?? 'asc' },
       take: perPage,
@@ -39,29 +39,15 @@ export class RoleService {
   }
 
   async findOne(id?: number) {
-    if (!id || isNaN(id)) {
-      throw NotFoundException;
-    }
-    const role = await this.repo.findOne({
-      where: {
-        id : id,
-      },
-    });
 
-    if(!role){
-      throw new NotFoundException(`there is nor role with id ${id}`)
-    }
+    const role = await this.roleRepo.findOneBy({ id : id, })
+      .then(value => {if (! value) {throw new NotFoundException();} return value;});
 
-
-    return ApiResponse.successResponse(
-      'role',
-      RoleResource.single(role),
-      200,
-    );
+    return RoleResource.single(role);
   }
 
   async search(name) {
-    let roles: any = await this.repo.find({
+    let roles: any = await this.roleRepo.find({
       select: ['id'],
       where: {
         translations: {
