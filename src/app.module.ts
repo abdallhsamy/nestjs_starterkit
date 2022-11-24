@@ -10,6 +10,7 @@ import { SetGlobalVarsMiddleware } from './libs/middlewares/set-global-vars';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import serverConfig from './libs/serverConfig/serverConfig';
+import { PermissionModule } from "@src/permission/permission.module";
 const MQ_USER = serverConfig.MQ_USER;
 const MQ_PASS = serverConfig.MQ_PASS;
 const MQ_URL = serverConfig.MQ_URL;
@@ -17,6 +18,7 @@ const MQ_URL = serverConfig.MQ_URL;
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormOptions),
+    PermissionModule,
     RoleModule,
   ],
   controllers: [],
