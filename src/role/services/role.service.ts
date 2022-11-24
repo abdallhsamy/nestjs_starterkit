@@ -7,6 +7,7 @@ import { RoleResource } from '../resources/role.resource.js';
 import { NotFoundException } from "@nestjs/common";
 import { CreateRoleDto } from "../dto/create-role.dto";
 import TranslationRepository from "../../libs/repositories/translation.repository";
+import { UpdateRoleDto } from "../dto/update-role.dto";
 
 export class RoleService {
   constructor(
@@ -52,14 +53,24 @@ export class RoleService {
     return await this.findOne( role.id);
   }
 
-
-
   async findOne(id?: number) {
 
     const role = await this.roleRepo.findOneBy({ id : id, })
       .then(value => {if (! value) {throw new NotFoundException();} return value;});
 
     return RoleResource.single(role);
+  }
+
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
+
+    const role = await this.roleRepo.findOneBy({ id : id, })
+      .then(value => {if (! value) {throw new NotFoundException();} return value;});
+
+    await this.roleRepo.update({id}, { } );
+
+    await TranslationRepository.updateTranslations('role_id', id, updateRoleDto.translations , this.roleTranslationRepo )
+
+    return await this.findOne( id );
   }
 
   async search(name) {

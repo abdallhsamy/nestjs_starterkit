@@ -4,11 +4,12 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  Query, ParseIntPipe, Post, Body, Res, UsePipes, ValidationPipe
+  Query, ParseIntPipe, Post, Body, Res, UsePipes, ValidationPipe, Patch
 } from "@nestjs/common";
 import { RoleService } from '../services/role.service';
 import { CreateRoleDto } from "../dto/create-role.dto";
 import { ValidateNested } from "class-validator";
+import { UpdateRoleDto } from "../dto/update-role.dto";
 
 @Controller({ path:"roles", version: '1', })
 export class RoleV1Controller
@@ -39,5 +40,13 @@ export class RoleV1Controller
   @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('id', ParseIntPipe) id) {
     return this.service.findOne(+id);
+  }
+
+  @Patch(':id')
+  @ValidateNested()
+  @UsePipes(new ValidationPipe({ whitelist:true }))
+  @UseInterceptors(ClassSerializerInterceptor)
+  update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
+    return this.service.update(+id, dto);
   }
 }
