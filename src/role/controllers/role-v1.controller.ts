@@ -4,9 +4,11 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Param,
-  Query, ParseIntPipe
+  Query, ParseIntPipe, Post, Body, Res, UsePipes, ValidationPipe
 } from "@nestjs/common";
 import { RoleService } from '../services/role.service';
+import { CreateRoleDto } from "../dto/create-role.dto";
+import { ValidateNested } from "class-validator";
 
 @Controller({ path:"roles", version: '1', })
 export class RoleV1Controller
@@ -23,6 +25,14 @@ export class RoleV1Controller
   @UseInterceptors(ClassSerializerInterceptor)
   findAll(@Query() query) {
     return this.service.findAll(query);
+  }
+
+  @Post('/')
+  @ValidateNested()
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async create(@Body() dto: CreateRoleDto): Promise<any> {
+    return await this.service.create(dto);
   }
 
   @Get(':id')

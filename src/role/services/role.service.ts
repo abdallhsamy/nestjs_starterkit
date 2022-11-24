@@ -5,6 +5,8 @@ import { RoleEntity } from '../entities/role.entity';
 import { RoleTranslationEntity } from "../entities/role-translation.entity";
 import { RoleResource } from '../resources/role.resource.js';
 import { NotFoundException } from "@nestjs/common";
+import { CreateRoleDto } from "../dto/create-role.dto";
+import TranslationRepository from "../../libs/repositories/translation.repository";
 
 export class RoleService {
   constructor(
@@ -37,6 +39,20 @@ export class RoleService {
 
     return { data: RoleResource.collection(roles), meta };
   }
+
+  async create(dto: CreateRoleDto) {
+
+    const role = this.roleRepo.create( dto );
+
+    await this.roleRepo.save(role);
+
+    await TranslationRepository
+      .setTranslations( dto.translations , this.roleTranslationRepo , 'role_id' , role.id)
+
+    return await this.findOne( role.id);
+  }
+
+
 
   async findOne(id?: number) {
 
