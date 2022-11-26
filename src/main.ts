@@ -7,13 +7,16 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import config from '@common/config';
 import { AppModule } from "@app/app.module";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const configService = new ConfigService();
 
 async function bootstrap() {
   await source.initialize();
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(new TypeormErrorFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
@@ -37,6 +40,26 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('docs', app, document);
   }
+
+  /* SECURITY */
+  app.enable("trust proxy");
+  app.use(helmet());
+
+  app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message:
+      "Too many requests from this IP, please try again later"
+  }));
+  const createAccountLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1-hour window
+    max: 3, // start blocking after 3 requests
+    message:
+      "Too many accounts created from this IP, please try again after an hour"
+  });
+  app.use("/auth/email/register", createAccountLimiter);
+  /******/
+
 
   await app.listen(config('app.port'));
 }
