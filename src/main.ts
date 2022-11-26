@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import source from '@common/ormconfig';
+import source from './ormconfig';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@lib/errors/http-exception.filter';
 import { TypeormErrorFilter } from '@lib/errors/typeorm.error.filter';

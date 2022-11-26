@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { RoleModule } from '@src/role/role.module';
-import { ormOptions } from '@common/ormconfig';
+import { ormOptions } from '@src/ormconfig';
 import { SetGlobalVarsMiddleware } from '@lib/middlewares/set-global-vars';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
