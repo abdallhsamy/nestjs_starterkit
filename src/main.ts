@@ -10,6 +10,9 @@ import { AppModule } from "@app/app.module";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { join } from 'path';
+import { AllExceptionsFilter } from "@common/filters/all-exceptions.filter";
+import * as express from 'express';
 
 const configService = new ConfigService();
 
@@ -40,6 +43,12 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('docs', app, document);
   }
+
+  app.use('/public', express.static(join(__dirname, '../../public')));
+  var bodyParser = require('body-parser');
+  app.use(bodyParser.json({limit: '5mb'}));
+  app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   /* SECURITY */
   app.enable("trust proxy");

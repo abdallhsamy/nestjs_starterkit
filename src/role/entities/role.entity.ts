@@ -17,7 +17,7 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 import { translation } from "@lib/utils/database";
 
 @Entity({ name: 'roles' })
-export class RoleEntity extends BaseEntity {
+export class RoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
