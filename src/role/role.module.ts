@@ -7,7 +7,7 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleEntity } from './entities/role.entity';
 import { RoleTranslationEntity } from './entities/role-translation.entity';
-import { CacheAvailableTaxesMiddleware } from '../libs/middlewares/cache-available-taxes';
+import { CacheAvailableTaxesMiddleware } from '@lib/middlewares/cache-available-taxes';
 import { RoleV1Controller } from './controllers/role-v1.controller';
 import { RoleService } from './services/role.service';
 

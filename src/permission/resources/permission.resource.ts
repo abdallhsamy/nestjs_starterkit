@@ -1,5 +1,5 @@
 import { PermissionEntity } from '../entities/permission.entity';
-import { ResourceResponse } from '@src/libs/classes/resource-response';
+import { ResourceResponse } from '@lib/classes/resource-response';
 
 export class PermissionResource extends ResourceResponse {
   static single(permission: PermissionEntity) {

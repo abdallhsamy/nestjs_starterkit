@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Not, Repository } from 'typeorm';
-import { ApiResponse } from '@src/libs/errors/api-response';
+import { ApiResponse } from '@lib/errors/api-response';
 import { PermissionEntity } from '../entities/permission.entity';
 import { PermissionResource } from '../resources/permission.resource.js';
 import { NotFoundException } from '@nestjs/common';

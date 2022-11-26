@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import source from './ormconfig';
+import source from '@common/ormconfig';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { HttpExceptionFilter } from './libs/errors/http-exception.filter';
-import { TypeormErrorFilter } from './libs/errors/typeorm.error.filter';
+import { HttpExceptionFilter } from '@lib/errors/http-exception.filter';
+import { TypeormErrorFilter } from '@lib/errors/typeorm.error.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import config from '@src/config';
+import config from '@common/config';
+import { AppModule } from "@app/app.module";
 
 const configService = new ConfigService();
 

@@ -1,5 +1,5 @@
 import { RoleEntity } from '../entities/role.entity';
-import { ResourceResponse } from '../../libs/classes/resource-response';
+import { ResourceResponse } from '@lib/classes/resource-response';
 
 export class RoleResource extends ResourceResponse {
   static single(role: RoleEntity) {

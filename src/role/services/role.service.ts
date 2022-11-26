@@ -1,12 +1,12 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { ApiResponse } from "@src/libs/errors/api-response";
+import { ApiResponse } from "@lib/errors/api-response";
 import { RoleEntity } from '../entities/role.entity';
 import { RoleTranslationEntity } from '../entities/role-translation.entity';
 import { RoleResource } from '../resources/role.resource.js';
 import { NotFoundException } from '@nestjs/common';
 import { CreateRoleDto } from '../dto/create-role.dto';
-import TranslationRepository from '../../libs/repositories/translation.repository';
+import TranslationRepository from '@lib/repositories/translation.repository';
 import { UpdateRoleDto } from '../dto/update-role.dto';
 
 export class RoleService {
