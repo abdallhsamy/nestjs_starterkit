@@ -2,6 +2,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
   ValidateNested,
@@ -14,6 +15,11 @@ export class CreateRoleV1Dto {
   @ArrayMinSize(1)
   @Type(() => CreateRoleTranslationDto)
   translations: CreateRoleTranslationDto[];
+
+  @IsArray()
+  @IsOptional()
+  @Type(() => Number)
+  permissions: number[];
 }
 
 export class CreateRoleTranslationDto {

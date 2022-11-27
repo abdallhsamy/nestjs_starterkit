@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Like, Not, Repository } from 'typeorm';
+import { In, IsNull, Like, Not, Repository } from 'typeorm';
 import { ApiResponse } from '@lib/errors/api-response';
 import { PermissionEntity } from '../entities/permission.entity';
 import { PermissionV1Resource } from '../resources/permission-v1.resource.js';
@@ -12,6 +12,12 @@ export class PermissionV1Service {
     @InjectRepository(PermissionEntity)
     private permissionRepo: Repository<PermissionEntity>,
   ) {}
+
+  async getPermissionsByIds(ids: number[]) {
+    return await this.permissionRepo.find({
+      where: { id: In(ids) },
+    });
+  }
 
   async findAll(query) {
     const filter = {};

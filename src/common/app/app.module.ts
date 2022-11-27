@@ -11,9 +11,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { PermissionModule } from '@src/permission/permission.module';
 import { UserModule } from '@src/user/user.module';
+import { AuthModule } from "@src/auth/auth.module";
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormOptions), PermissionModule, RoleModule, UserModule],
+  imports: [
+    TypeOrmModule.forRoot(ormOptions),
+    AuthModule,
+    PermissionModule,
+    RoleModule,
+    UserModule
+  ],
   controllers: [],
   providers: [],
 })
