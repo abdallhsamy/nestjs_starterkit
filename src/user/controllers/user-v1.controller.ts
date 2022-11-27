@@ -14,10 +14,10 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { UserService } from '../services/user.service';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { UserV1Service } from '../services/user-v1.service';
+import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
 import { ValidateNested } from 'class-validator';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -37,7 +37,7 @@ import * as swagger from '../swagger/user-v1.swagger';
 @ApiTags('users')
 @Controller({ path: 'users', version: '1' })
 export class UserV1Controller {
-  constructor(private readonly service: UserService) {}
+  constructor(private readonly service: UserV1Service) {}
 
   @Get('/')
   @ApiQuery(swagger.findAll.req.query.limit)
@@ -59,7 +59,7 @@ export class UserV1Controller {
   @ValidateNested()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() dto: CreateUserDto): Promise<any> {
+  async create(@Body() dto: CreateUserV1Dto): Promise<any> {
     return await this.service.create(dto);
   }
 
@@ -83,7 +83,7 @@ export class UserV1Controller {
   @ValidateNested()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @UseInterceptors(ClassSerializerInterceptor)
-  update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateUserV1Dto) {
     return this.service.update(+id, dto);
   }
 

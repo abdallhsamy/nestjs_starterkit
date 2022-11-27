@@ -2,12 +2,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { ApiResponse } from "@lib/errors/api-response";
 import { UserEntity } from '../entities/user.entity';
-import { UserResource } from '../resources/user.resource.js';
+import { UserV1Resource } from '../resources/user-v1.resource.js';
 import { NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
+import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
 
-export class UserService {
+export class UserV1Service {
   constructor(@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>) {}
 
   async findAll(query) {
@@ -31,10 +31,10 @@ export class UserService {
       total,
     };
 
-    return { data: UserResource.collection(users), meta };
+    return { data: UserV1Resource.collection(users), meta };
   }
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserV1Dto) {
     const user = this.userRepo.create(dto);
 
     await this.userRepo.save(user);
@@ -50,10 +50,10 @@ export class UserService {
       return value;
     });
 
-    return UserResource.single(user);
+    return UserV1Resource.single(user);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserV1Dto) {
     const user = await this.userRepo.findOneBy({ id: id }).then((value) => {
       if (!value) {
         throw new NotFoundException();

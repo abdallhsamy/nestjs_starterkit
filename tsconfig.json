@@ -26,7 +26,8 @@
       "@exceptions/*": ["./src/common/exceptions/*"],
       "@lang/*":  ["./src/common/lang/*"],
       "@lib/*": ["./src/common/lib/*"],
-      "@middlewares/*":  ["./src/common/middlewares/*"]
+      "@middlewares/*":  ["./src/common/middlewares/*"],
+      "@roles/*":  ["./src/common/roles/*"]
     }
   }
 }

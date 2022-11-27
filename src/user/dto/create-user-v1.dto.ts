@@ -1,7 +1,7 @@
 type Gender = 'male' | 'female';
 import { IsDefined, IsEmail, IsIn, IsNotEmpty, IsString } from "class-validator";
 
-export class CreateUserDto {
+export class CreateUserV1Dto {
   @IsEmail()
   // is Unique
   email

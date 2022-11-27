@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { CacheAvailableTaxesMiddleware } from '@lib/middlewares/cache-available-taxes';
 import { UserV1Controller } from './controllers/user-v1.controller';
-import { UserService } from './services/user.service';
+import { UserV1Service } from './services/user-v1.service';
 
 @Module({
   imports: [
@@ -16,8 +16,8 @@ import { UserService } from './services/user.service';
     CacheModule.register(),
   ],
   controllers: [UserV1Controller],
-  providers: [UserService],
-  exports: [UserService],
+  providers: [UserV1Service],
+  exports: [UserV1Service],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
