@@ -9,7 +9,7 @@ import { RoleEntity } from './entities/role.entity';
 import { RoleTranslationEntity } from './entities/role-translation.entity';
 import { CacheAvailableTaxesMiddleware } from '@lib/middlewares/cache-available-taxes';
 import { RoleV1Controller } from './controllers/role-v1.controller';
-import { RoleService } from './services/role.service';
+import { RoleV1Service } from './services/role-v1.service';
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { RoleService } from './services/role.service';
     CacheModule.register(),
   ],
   controllers: [RoleV1Controller],
-  providers: [RoleService],
-  exports: [RoleService],
+  providers: [RoleV1Service],
+  exports: [RoleV1Service],
 })
 export class RoleModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

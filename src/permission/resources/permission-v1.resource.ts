@@ -1,7 +1,7 @@
 import { PermissionEntity } from '../entities/permission.entity';
 import { ResourceResponse } from '@lib/classes/resource-response';
 
-export class PermissionResource extends ResourceResponse {
+export class PermissionV1Resource extends ResourceResponse {
   static single(permission: PermissionEntity) {
     return {
       data: this.#toArray(permission),

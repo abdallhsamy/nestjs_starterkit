@@ -14,10 +14,10 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { RoleService } from '../services/role.service';
-import { CreateRoleDto } from '../dto/create-role.dto';
+import { RoleV1Service } from '../services/role-v1.service';
+import { CreateRoleV1Dto } from '../dto/create-role-v1.dto';
 import { ValidateNested } from 'class-validator';
-import { UpdateRoleDto } from '../dto/update-role.dto';
+import { UpdateRoleV1Dto } from '../dto/update-role-v1.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -37,7 +37,7 @@ import * as swagger from '../swagger/role-v1.swagger';
 @ApiTags('roles')
 @Controller({ path: 'roles', version: '1' })
 export class RoleV1Controller {
-  constructor(private readonly service: RoleService) {}
+  constructor(private readonly service: RoleV1Service) {}
 
   @Get('search/:name')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -65,7 +65,7 @@ export class RoleV1Controller {
   @ValidateNested()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() dto: CreateRoleDto): Promise<any> {
+  async create(@Body() dto: CreateRoleV1Dto): Promise<any> {
     return await this.service.create(dto);
   }
 
@@ -89,7 +89,7 @@ export class RoleV1Controller {
   @ValidateNested()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @UseInterceptors(ClassSerializerInterceptor)
-  update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateRoleV1Dto) {
     return this.service.update(+id, dto);
   }
 

@@ -14,7 +14,7 @@ import { isUnique } from '@lib/utils/database';
 import { PermissionActionsEnum } from '@src/permission/enums/permission-actions.enum';
 import { exists } from 'fs';
 
-export class CreatePermissionDto {
+export class CreatePermissionV1Dto {
   @IsString()
   @IsNotEmpty()
   model: string;

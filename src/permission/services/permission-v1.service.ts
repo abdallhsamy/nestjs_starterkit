@@ -2,12 +2,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Not, Repository } from 'typeorm';
 import { ApiResponse } from '@lib/errors/api-response';
 import { PermissionEntity } from '../entities/permission.entity';
-import { PermissionResource } from '../resources/permission.resource.js';
+import { PermissionV1Resource } from '../resources/permission-v1.resource.js';
 import { NotFoundException } from '@nestjs/common';
-import { CreatePermissionDto } from '../dto/create-permission.dto';
-import { UpdatePermissionDto } from '../dto/update-permission.dto';
+import { CreatePermissionV1Dto } from '../dto/create-permission-v1.dto';
+import { UpdatePermissionV1Dto } from '../dto/update-permission-v1.dto';
 
-export class PermissionService {
+export class PermissionV1Service {
   constructor(
     @InjectRepository(PermissionEntity)
     private permissionRepo: Repository<PermissionEntity>,
@@ -34,10 +34,10 @@ export class PermissionService {
       total,
     };
 
-    return { data: PermissionResource.collection(permissions), meta };
+    return { data: PermissionV1Resource.collection(permissions), meta };
   }
 
-  async create(dto: CreatePermissionDto) {
+  async create(dto: CreatePermissionV1Dto) {
     const permission = this.permissionRepo.create(dto);
 
     await this.permissionRepo.save(permission);
@@ -57,10 +57,10 @@ export class PermissionService {
         return value;
       });
 
-    return PermissionResource.single(permission);
+    return PermissionV1Resource.single(permission);
   }
 
-  async update(id: number, updatePermissionDto: UpdatePermissionDto) {
+  async update(id: number, updatePermissionDto: UpdatePermissionV1Dto) {
     const permission = await this.permissionRepo
       .findOneBy({ id: id })
       .then((value) => {

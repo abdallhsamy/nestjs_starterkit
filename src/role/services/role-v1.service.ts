@@ -3,13 +3,13 @@ import { Like, Repository } from 'typeorm';
 import { ApiResponse } from "@lib/errors/api-response";
 import { RoleEntity } from '../entities/role.entity';
 import { RoleTranslationEntity } from '../entities/role-translation.entity';
-import { RoleResource } from '../resources/role.resource.js';
+import { RoleV1Resource } from '../resources/role-v1.resource.js';
 import { NotFoundException } from '@nestjs/common';
-import { CreateRoleDto } from '../dto/create-role.dto';
+import { CreateRoleV1Dto } from '../dto/create-role-v1.dto';
 import TranslationRepository from '@lib/repositories/translation.repository';
-import { UpdateRoleDto } from '../dto/update-role.dto';
+import { UpdateRoleV1Dto } from '../dto/update-role-v1.dto';
 
-export class RoleService {
+export class RoleV1Service {
   constructor(
     @InjectRepository(RoleEntity)
     private roleRepo: Repository<RoleEntity>,
@@ -38,10 +38,10 @@ export class RoleService {
       total,
     };
 
-    return { data: RoleResource.collection(roles), meta };
+    return { data: RoleV1Resource.collection(roles), meta };
   }
 
-  async create(dto: CreateRoleDto) {
+  async create(dto: CreateRoleV1Dto) {
     const role = this.roleRepo.create(dto);
 
     await this.roleRepo.save(role);
@@ -64,10 +64,10 @@ export class RoleService {
       return value;
     });
 
-    return RoleResource.single(role);
+    return RoleV1Resource.single(role);
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) {
+  async update(id: number, updateRoleDto: UpdateRoleV1Dto) {
     const role = await this.roleRepo.findOneBy({ id: id }).then((value) => {
       if (!value) {
         throw new NotFoundException();
