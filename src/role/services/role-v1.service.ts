@@ -8,6 +8,7 @@ import { NotFoundException } from '@nestjs/common';
 import { CreateRoleV1Dto } from '../dto/create-role-v1.dto';
 import TranslationRepository from '@lib/repositories/translation.repository';
 import { UpdateRoleV1Dto } from '../dto/update-role-v1.dto';
+import { RolePermissionV1Service } from '../../permission/services/role-permission-v1.service';
 
 export class RoleV1Service {
   constructor(
@@ -15,6 +16,7 @@ export class RoleV1Service {
     private roleRepo: Repository<RoleEntity>,
     @InjectRepository(RoleTranslationEntity)
     private roleTranslationRepo: Repository<RoleTranslationEntity>,
+    private readonly rolePermissionService: RolePermissionV1Service,
   ) {}
 
   async findAll(query) {
@@ -42,9 +44,25 @@ export class RoleV1Service {
   }
 
   async create(dto: CreateRoleV1Dto) {
-    const role = this.roleRepo.create(dto);
+    // map request object for creating role with neglecting permissions array which
+    // is used for assigning permissions to created role
+    const createRoleRequest = { translations: dto.translations };
 
-    await this.roleRepo.save(role);
+    const role = this.roleRepo.create(createRoleRequest);
+
+    let roleToBeCreate: RoleEntity;
+
+    if (dto.permissions && dto.permissions.length) {
+      // get role with assigned permissions
+      roleToBeCreate = await this.assignPermissionsToRoles(
+        role,
+        dto.permissions,
+      );
+    } else {
+      roleToBeCreate = role;
+    }
+
+    await this.roleRepo.save(roleToBeCreate);
 
     await TranslationRepository.setTranslations(
       dto.translations,
@@ -52,8 +70,15 @@ export class RoleV1Service {
       'role_id',
       role.id,
     );
-
+    
     return await this.findOne(role.id);
+  }
+
+  async assignPermissionsToRoles(role: RoleEntity, permissionsIds: number[]) {
+    return await this.rolePermissionService.assignPermissionsToRoles(
+      role,
+      permissionsIds,
+    );
   }
 
   async findOne(id?: number) {

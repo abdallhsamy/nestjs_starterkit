@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PermissionEntity } from './entities/permission.entity';
 import { PermissionV1Controller } from './controllers/permission-v1.controller';
 import { PermissionV1Service } from './services/permission-v1.service';
+import { RolePermissionV1Service } from './services/role-permission-v1.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { PermissionV1Service } from './services/permission-v1.service';
     CacheModule.register(),
   ],
   controllers: [PermissionV1Controller],
-  providers: [PermissionV1Service],
+  providers: [PermissionV1Service, RolePermissionV1Service],
   exports: [PermissionV1Service],
 })
 export class PermissionModule implements NestModule {
