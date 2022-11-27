@@ -14,10 +14,10 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { PermissionService } from '../services/permission.service';
-import { CreatePermissionDto } from '../dto/create-permission.dto';
+import { PermissionV1Service } from '../services/permission-v1.service';
+import { CreatePermissionV1Dto } from '../dto/create-permission-v1.dto';
 import { ValidateNested } from 'class-validator';
-import { UpdatePermissionDto } from '../dto/update-permission.dto';
+import { UpdatePermissionV1Dto } from '../dto/update-permission-v1.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -37,7 +37,7 @@ import * as swagger from '../swagger/permission-v1.swagger';
 @ApiTags('permissions')
 @Controller({ path: 'permissions', version: '1' })
 export class PermissionV1Controller {
-  constructor(private readonly service: PermissionService) {}
+  constructor(private readonly service: PermissionV1Service) {}
 
   @Get('search/:name')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -65,7 +65,7 @@ export class PermissionV1Controller {
   @ValidateNested()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() dto: CreatePermissionDto): Promise<any> {
+  async create(@Body() dto: CreatePermissionV1Dto): Promise<any> {
     return await this.service.create(dto);
   }
 
@@ -89,7 +89,7 @@ export class PermissionV1Controller {
   @ValidateNested()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @UseInterceptors(ClassSerializerInterceptor)
-  update(@Param('id') id: string, @Body() dto: UpdatePermissionDto) {
+  update(@Param('id') id: string, @Body() dto: UpdatePermissionV1Dto) {
     return this.service.update(+id, dto);
   }
 

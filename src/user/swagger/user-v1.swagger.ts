@@ -12,7 +12,7 @@ export const findAll = {
   res: {
     ok: {
       status: HttpStatus.OK,
-      description: 'Roles are fetched successfully',
+      description: 'Users are fetched successfully',
     },
     unauthorized,
   },
@@ -27,7 +27,7 @@ export const findOne = {
   res: {
     ok: {
       status: HttpStatus.OK,
-      description: 'Role is fetched successfully',
+      description: 'User is fetched successfully',
     },
     unauthorized,
   },
@@ -48,12 +48,12 @@ export const create = {
   res: {
     created: {
       status: HttpStatus.CREATED,
-      description: 'Role is created successfully',
+      description: 'User is created successfully',
     },
     unauthorized: unauthorized,
     bad_request: {
       status: HttpStatus.BAD_REQUEST,
-      description: 'Error while creating role',
+      description: 'Error while creating user',
     },
     conflict: {
       status: HttpStatus.CONFLICT,
@@ -80,7 +80,7 @@ export const update = {
   res: {
     ok: {
       status: HttpStatus.OK,
-      description: 'Role is updated successfully',
+      description: 'User is updated successfully',
     },
     unauthorized: unauthorized,
     bad_request_email: {
@@ -93,7 +93,7 @@ export const update = {
     },
     unprocessable: {
       status: HttpStatus.UNPROCESSABLE_ENTITY,
-      description: 'name is already used by another role',
+      description: 'name is already used by another user',
     },
   },
 };
@@ -107,12 +107,12 @@ export const softDelete = {
   res: {
     ok: {
       status: HttpStatus.OK,
-      description: 'Role is deleted successfully',
+      description: 'User is deleted successfully',
     },
     unauthorized: unauthorized,
     unprocessable: {
       status: HttpStatus.BAD_REQUEST,
-      description: 'Error while deleting role',
+      description: 'Error while deleting user',
     },
   },
 };

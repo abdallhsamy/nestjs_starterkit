@@ -14,10 +14,10 @@ import {
 } from 'typeorm';
 import { RoleTranslationEntity } from './role-translation.entity';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { translation } from "@src/libs/utils/database";
+import { translation } from "@lib/utils/database";
 
 @Entity({ name: 'roles' })
-export class RoleEntity extends BaseEntity {
+export class RoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

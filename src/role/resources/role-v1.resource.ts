@@ -1,7 +1,7 @@
 import { RoleEntity } from '../entities/role.entity';
-import { ResourceResponse } from '../../libs/classes/resource-response';
+import { ResourceResponse } from '@lib/classes/resource-response';
 
-export class RoleResource extends ResourceResponse {
+export class RoleV1Resource extends ResourceResponse {
   static single(role: RoleEntity) {
     return {
       data: this.#toArray(role),

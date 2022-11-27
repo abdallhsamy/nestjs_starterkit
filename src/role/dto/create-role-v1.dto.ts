@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class CreateRoleDto {
+export class CreateRoleV1Dto {
   @ValidateNested({ each: true })
   @IsArray()
   @ArrayMinSize(1)

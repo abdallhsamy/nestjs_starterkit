@@ -1,6 +1,6 @@
 // import ArabicTranslations from '../../languages/ar.json'
 import { diskStorage } from 'multer';
-import dataSource from '../../ormconfig';
+import dataSource from '@src/ormconfig';
 import { generateFileName, imageFileFilter } from './file-upload';
 
 export const translate = (word) => {

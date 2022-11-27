@@ -14,10 +14,10 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { RoleV1Service } from '../services/role-v1.service';
-import { CreateRoleV1Dto } from '../dto/create-role-v1.dto';
+import { UserV1Service } from '../services/user-v1.service';
+import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
 import { ValidateNested } from 'class-validator';
-import { UpdateRoleV1Dto } from '../dto/update-role-v1.dto';
+import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -31,19 +31,13 @@ import {
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import * as swagger from '../swagger/role-v1.swagger';
+import * as swagger from '../swagger/user-v1.swagger';
 
 @ApiBearerAuth()
-@ApiTags('roles')
-@Controller({ path: 'roles', version: '1' })
-export class RoleV1Controller {
-  constructor(private readonly service: RoleV1Service) {}
-
-  @Get('search/:name')
-  @UseInterceptors(ClassSerializerInterceptor)
-  search(@Param('name') roleName) {
-    return this.service.search(roleName);
-  }
+@ApiTags('users')
+@Controller({ path: 'users', version: '1' })
+export class UserV1Controller {
+  constructor(private readonly service: UserV1Service) {}
 
   @Get('/')
   @ApiQuery(swagger.findAll.req.query.limit)
@@ -65,7 +59,7 @@ export class RoleV1Controller {
   @ValidateNested()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() dto: CreateRoleV1Dto): Promise<any> {
+  async create(@Body() dto: CreateUserV1Dto): Promise<any> {
     return await this.service.create(dto);
   }
 
@@ -89,7 +83,7 @@ export class RoleV1Controller {
   @ValidateNested()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   @UseInterceptors(ClassSerializerInterceptor)
-  update(@Param('id') id: string, @Body() dto: UpdateRoleV1Dto) {
+  update(@Param('id') id: string, @Body() dto: UpdateUserV1Dto) {
     return this.service.update(+id, dto);
   }
 

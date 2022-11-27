@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import config from './config';
+import config from '@common/config';
 
 export const ormOptions: any = {
   type: 'mysql',
