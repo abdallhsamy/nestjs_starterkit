@@ -10,9 +10,10 @@ import { SetGlobalVarsMiddleware } from '@lib/middlewares/set-global-vars';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { PermissionModule } from '@src/permission/permission.module';
+import { UserModule } from '@src/user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormOptions), PermissionModule, RoleModule],
+  imports: [TypeOrmModule.forRoot(ormOptions), PermissionModule, RoleModule, UserModule],
   controllers: [],
   providers: [],
 })
