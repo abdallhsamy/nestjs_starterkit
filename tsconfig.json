@@ -27,7 +27,8 @@
       "@lang/*":  ["./src/common/lang/*"],
       "@lib/*": ["./src/common/lib/*"],
       "@middlewares/*":  ["./src/common/middlewares/*"],
-      "@roles/*":  ["./src/common/roles/*"]
+      "@roles/*":  ["./src/common/roles/*"],
+      "@strategies/*":  ["./src/common/strategies/*"]
     }
   }
 }
