@@ -30,7 +30,7 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import * as swagger from '../swagger/profile-v1.swagger';
-import { ProfileV1Service } from "@src/user/services/profile-v1.service";
+import { ProfileV1Service } from '@src/user/services/profile-v1.service';
 
 @ApiBearerAuth()
 @ApiTags('users')

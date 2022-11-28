@@ -11,10 +11,7 @@ import { UserV1Controller } from './controllers/user-v1.controller';
 import { UserV1Service } from './services/user-v1.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity]),
-    CacheModule.register(),
-  ],
+  imports: [TypeOrmModule.forFeature([UserEntity]), CacheModule.register()],
   controllers: [UserV1Controller],
   providers: [UserV1Service],
   exports: [UserV1Service],

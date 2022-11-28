@@ -1,5 +1,5 @@
 import { Transport } from '@nestjs/microservices';
-import serverConfig from "@lib/serverConfig/serverConfig";
+import serverConfig from '@lib/serverConfig/serverConfig';
 const tcpModuleStyle: any = (name: string, host: string, port: number) => {
   return {
     name: name,

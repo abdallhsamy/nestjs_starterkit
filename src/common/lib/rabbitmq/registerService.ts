@@ -1,5 +1,5 @@
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
-import serverConfig from "@lib/serverConfig/serverConfig";
+import serverConfig from '@lib/serverConfig/serverConfig';
 const MQ_USER = serverConfig.MQ_USER;
 const MQ_PASS = serverConfig.MQ_PASS;
 const MQ_URL = serverConfig.MQ_URL;

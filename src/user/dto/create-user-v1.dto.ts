@@ -1,28 +1,33 @@
 type Gender = 'male' | 'female';
-import { IsDefined, IsEmail, IsIn, IsNotEmpty, IsString } from "class-validator";
+import {
+  IsDefined,
+  IsEmail,
+  IsIn,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserV1Dto {
   @IsEmail()
   // is Unique
-  email
+  email;
 
   @IsString()
   @IsNotEmpty()
-  first_name
+  first_name;
 
   @IsString()
-  last_name
+  last_name;
 
   @IsString()
-  phone_number
+  phone_number;
 
   @IsNotEmpty()
-  password
-  birth_date
+  password;
+  birth_date;
 
   @IsDefined()
   @IsString()
   @IsIn(['male', 'female'])
-  gender : Gender;
+  gender: Gender;
 }
-

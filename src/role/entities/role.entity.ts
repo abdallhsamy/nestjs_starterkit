@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 import { RoleTranslationEntity } from './role-translation.entity';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { translation } from "@lib/utils/database";
+import { translation } from '@lib/utils/database';
 import { PermissionEntity } from '@src/permission/entities/permission.entity';
 
 @Entity({ name: 'roles' })

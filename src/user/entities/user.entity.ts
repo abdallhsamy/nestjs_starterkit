@@ -13,8 +13,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { translation } from "@lib/utils/database";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { translation } from '@lib/utils/database';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -22,19 +22,19 @@ export class UserEntity {
   id: number;
 
   @Column()
-  email : string;
+  email: string;
 
   @Column()
-  first_name : string;
+  first_name: string;
 
   @Column()
-  last_name : string;
+  last_name: string;
 
   @Column()
-  phone_number : string;
+  phone_number: string;
 
   @Column()
-  password : string;
+  password: string;
 
   @Column({ nullable: true, type: 'date' })
   birth_date: Date;

@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Param, Res, HttpStatus } from '@nestjs/common';
-import { AuthV1Service } from "@src/auth/services/auth-v1.service";
-import { RegisterV1Dto } from "@src/auth/dto/register-v1.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { LoginV1Dto } from "@src/auth/dto/login-v1.dto";
-import { ResetPasswordV1Dto } from "@src/auth/dto/reset-password-v1.dto";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
+import { AuthV1Service } from '@src/auth/services/auth-v1.service';
+import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { LoginV1Dto } from '@src/auth/dto/login-v1.dto';
+import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { getRestfulResponse } from '@src/common/lib/controller-response.helper';
 import { Response } from 'express';
 

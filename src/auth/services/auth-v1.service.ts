@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { LoginV1Dto } from "@src/auth/dto/login-v1.dto";
-import { ResetPasswordV1Dto } from "@src/auth/dto/reset-password-v1.dto";
+import { LoginV1Dto } from '@src/auth/dto/login-v1.dto';
+import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { UserV1Service } from '@src/user/services/user-v1.service';
 import { comparePasswords } from '@src/common/lib/utils/bcrypt';
 import { AuthMapper } from '../mappers/auth.mapper';
@@ -8,16 +8,19 @@ import { JwtService } from '@nestjs/jwt';
 import { generateToken } from '@src/common/lib/utils/jwt';
 
 @Injectable()
-export class AuthV1Service
-{
+export class AuthV1Service {
   private authMapper: AuthMapper;
-  constructor(private readonly userService: UserV1Service, private readonly jwtService: JwtService) {
+  constructor(
+    private readonly userService: UserV1Service,
+    private readonly jwtService: JwtService,
+  ) {
     this.authMapper = new AuthMapper();
   }
 
   public async register(dto: any) {
     // prepare user data for registeration
-    const registerRequestData = await this.authMapper.prepareRegisterUserDataMapper(dto);
+    const registerRequestData =
+      await this.authMapper.prepareRegisterUserDataMapper(dto);
 
     // start register user
     return await this.userService.create(registerRequestData);
@@ -25,11 +28,11 @@ export class AuthV1Service
 
   public async login(dto: LoginV1Dto) {
     // get user data by email
-    const user = await this.userService.findOneByKey("email", dto.email);
+    const user = await this.userService.findOneByKey('email', dto.email);
 
     // check passwords matching
     const isMatch = await comparePasswords(dto.password, user.password);
-    if (!isMatch) throw new UnprocessableEntityException("Passwords mismatch");
+    if (!isMatch) throw new UnprocessableEntityException('Passwords mismatch');
 
     // generate token from user payload
     const userPayload = this.authMapper.prepareUserPayload(user);

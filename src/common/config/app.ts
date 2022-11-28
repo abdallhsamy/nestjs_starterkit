@@ -17,4 +17,3 @@ export default {
 
   enable_swagger: configService.get('ENABLE_SWAGGER', false),
 };
-

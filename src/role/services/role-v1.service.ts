@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { ApiResponse } from "@lib/errors/api-response";
+import { ApiResponse } from '@lib/errors/api-response';
 import { RoleEntity } from '../entities/role.entity';
 import { RoleTranslationEntity } from '../entities/role-translation.entity';
 import { RoleV1Resource } from '../resources/role-v1.resource.js';
@@ -70,7 +70,7 @@ export class RoleV1Service {
       'role_id',
       role.id,
     );
-    
+
     return await this.findOne(role.id);
   }
 
