@@ -53,6 +53,14 @@ export class UserV1Service {
     return UserV1Resource.single(user);
   }
 
+  async findOneByKey(key: string, value: any) {
+    const condition = {};
+    condition[key] = value;
+    const user = await this.userRepo.findOneBy(condition);
+    if (!user) throw new NotFoundException();
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserV1Dto) {
     const user = await this.userRepo.findOneBy({ id: id }).then((value) => {
       if (!value) {

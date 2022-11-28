@@ -14,37 +14,32 @@ import {
 } from 'typeorm';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { translation } from "@lib/utils/database";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 @Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsString()
-  @IsNotEmpty()
+  @Column()
   email : string;
 
-  @IsString()
-  @IsNotEmpty()
+  @Column()
   first_name : string;
 
-  @IsString()
-  // @IsNotEmpty()
+  @Column()
   last_name : string;
 
-  @IsString()
-  // @IsNotEmpty()
+  @Column()
   phone_number : string;
 
-  @IsString()
-  // @IsNotEmpty()
+  @Column()
   password : string;
 
   @Column({ nullable: true, type: 'date' })
   birth_date: Date;
 
-  @IsString()
+  @Column()
   gender: string;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })

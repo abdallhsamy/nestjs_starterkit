@@ -1,32 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { RegisterV1Dto } from "@src/auth/dto/register-v1.dto";
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { LoginV1Dto } from "@src/auth/dto/login-v1.dto";
 import { ResetPasswordV1Dto } from "@src/auth/dto/reset-password-v1.dto";
+import { UserV1Service } from '@src/user/services/user-v1.service';
+import { comparePasswords } from '@src/common/lib/utils/bcrypt';
+import { AuthMapper } from '../mappers/auth.mapper';
+import { JwtService } from '@nestjs/jwt';
+import { generateToken } from '@src/common/lib/utils/jwt';
 
 @Injectable()
-export class AuthV1Service {
-
-  async register(dto: RegisterV1Dto) {
-    return 'register'; // todo : implement register
+export class AuthV1Service
+{
+  private authMapper: AuthMapper;
+  constructor(private readonly userService: UserV1Service, private readonly jwtService: JwtService) {
+    this.authMapper = new AuthMapper();
   }
 
-  async login(dto: LoginV1Dto) {
-    return 'login'; // todo : implement login
+  public async register(dto: any) {
+    // prepare user data for registeration
+    const registerRequestData = await this.authMapper.prepareRegisterUserDataMapper(dto);
+
+    // start register user
+    return await this.userService.create(registerRequestData);
   }
 
-  async verify(token: string) {
+  public async login(dto: LoginV1Dto) {
+    // get user data by email
+    const user = await this.userService.findOneByKey("email", dto.email);
+
+    // check passwords matching
+    const isMatch = await comparePasswords(dto.password, user.password);
+    if (!isMatch) throw new UnprocessableEntityException("Passwords mismatch");
+
+    // generate token from user payload
+    const userPayload = this.authMapper.prepareUserPayload(user);
+    const token = generateToken(userPayload, this.jwtService);
+
+    return { token };
+  }
+
+  public async verify(token: string) {
     return 'verify'; // todo : implement verify
   }
 
-  async resendVerification(email: string) {
+  public async resendVerification(email: string) {
     return 'resendVerification'; // todo : implement resendVerification
   }
 
-  async forgotPassword(email: string) {
+  public async forgotPassword(email: string) {
     return 'forgotPassword'; // todo : implement forgotPassword
   }
 
-  async resetPassword(dto: ResetPasswordV1Dto) {
+  public async resetPassword(dto: ResetPasswordV1Dto) {
     return 'resetPassword'; // todo : implement resetPassword
   }
 }
