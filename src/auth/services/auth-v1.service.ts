@@ -17,6 +17,8 @@ import { generateRandomText } from '@src/common/lib/utils/random.';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
+import config from "@config/index";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthV1Service {
@@ -40,14 +42,18 @@ export class AuthV1Service {
   }
 
   public async login(dto: LoginV1Dto) {
-    // get user data by email with validation on email and password
-    const user = await this.validateLogin(dto.email, dto.password);
+    const user = await this.getUserByKey('email', dto.email);
 
-    // generate token from user payload
+    if (! bcrypt.compareSync(dto.password, user.password)) {
+      throw new UnprocessableEntityException('Passwords mismatch');
+    }
+
     const userPayload = this.authMapper.prepareUserPayload(user);
-    const token = generateToken(userPayload, this.jwtService);
 
-    // create auth token in database
+    const jwtService = new JwtService()
+
+    const token = jwtService.sign(userPayload, { secret: config('app.secret_key') });
+
     const emailVerificationToken = await this.createAuthToken(user, token);
 
     return { token: emailVerificationToken.token };
@@ -77,17 +83,6 @@ export class AuthV1Service {
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
     return 'resetPassword'; // todo : implement resetPassword
-  }
-
-  public async validateLogin(email: string, password: string) {
-    // get user data by email
-    const user = await this.getUserByKey('email', email);
-
-    // check passwords matching
-    const isMatch = await comparePasswords(password, user.password);
-    if (!isMatch) throw new UnprocessableEntityException('Passwords mismatch');
-
-    return user;
   }
 
   private async getUserByKey(key: string, value: any) {
