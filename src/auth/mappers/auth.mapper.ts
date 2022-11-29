@@ -24,11 +24,15 @@ export class AuthMapper {
     const authToken = new AuthTokenEntity();
     authToken.token = token;
     authToken.user = user;
-    
+
     return authToken;
   }
 
-  public forgotPasswordMapper(user: UserEntity, password: string, token: string) {
+  public forgotPasswordMapper(
+    user: UserEntity,
+    password: string,
+    token: string,
+  ) {
     return { user, password, token };
   }
 }

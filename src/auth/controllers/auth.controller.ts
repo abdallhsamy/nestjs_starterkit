@@ -54,7 +54,7 @@ export class AuthV1Controller {
   async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto) {
     return await this.service.forgotPassword(forgetPasswordDto);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('reset-password') // Change user password
   async resetPassword(@Body() dto: ResetPasswordV1Dto, @Request() req: any) {

@@ -22,7 +22,8 @@ import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
-    @InjectRepository(AuthTokenEntity) private authTokenRepo: Repository<AuthTokenEntity>,
+    @InjectRepository(AuthTokenEntity)
+    private authTokenRepo: Repository<AuthTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -54,7 +55,9 @@ export class AuthV1Service {
   }
 
   public async verify(currentUser: UserEntity) {
-    return await this.userService.update(currentUser.id, { verified_at: new Date() });
+    return await this.userService.update(currentUser.id, {
+      verified_at: new Date(),
+    });
   }
 
   public async resendVerification(email: string) {
@@ -63,13 +66,20 @@ export class AuthV1Service {
 
   public async forgotPassword(forgetPassDto: ForgotPasswordV1Dto) {
     // fetch user data by email
-    const user = await this.userService.findOneByKey('email', forgetPassDto.email);
+    const user = await this.userService.findOneByKey(
+      'email',
+      forgetPassDto.email,
+    );
 
     // generate password instead of the forgotten one and hash it
     const password = await encodePassword(generateRandomText(5));
 
     // map forget password request
-    const forgotPasswordRequest = this.authMapper.forgotPasswordMapper(user, password, forgetPassDto.token);
+    const forgotPasswordRequest = this.authMapper.forgotPasswordMapper(
+      user,
+      password,
+      forgetPassDto.token,
+    );
 
     // create new password for the user and save in forget password table
     return await this.forgetPassService.forgetPassword(forgotPasswordRequest);

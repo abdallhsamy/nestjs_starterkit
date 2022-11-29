@@ -3,18 +3,11 @@ import {
   Get,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Param,
-  Query,
-  ParseIntPipe,
   Post,
   Body,
-  Res,
   UsePipes,
   ValidationPipe,
-  Patch,
-  Delete,
 } from '@nestjs/common';
-import { ValidateNested } from 'class-validator';
 import { UpdateProfileV1Dto } from '../dto/update-profile-v1.dto';
 import {
   ApiBadRequestResponse,
@@ -23,11 +16,8 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiParam,
-  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
-  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import * as swagger from '../swagger/profile-v1.swagger';
 import { ProfileV1Service } from '@src/user/services/profile-v1.service';

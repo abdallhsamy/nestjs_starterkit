@@ -6,7 +6,8 @@ import { ForgetPasswordEntity } from '../entities/forget-password.entity';
 @Injectable()
 export class ForgetPasswordV1Service {
   constructor(
-    @InjectRepository(ForgetPasswordEntity) private forgetPassRepo: Repository<ForgetPasswordEntity>,
+    @InjectRepository(ForgetPasswordEntity)
+    private forgetPassRepo: Repository<ForgetPasswordEntity>,
   ) {}
 
   public async forgetPassword(forgetPasswordRequest: any) {

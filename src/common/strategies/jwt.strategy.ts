@@ -7,7 +7,9 @@ import { UserEntity } from '@src/user/entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(@Inject(UserV1Service) private readonly userService: UserV1Service) {
+  constructor(
+    @Inject(UserV1Service) private readonly userService: UserV1Service,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -19,7 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     email: string;
     sub: string;
   }): Promise<UserEntity> {
-    return await this.userService.findOneByKey('email', validationPayload.email);
+    return await this.userService.findOneByKey(
+      'email',
+      validationPayload.email,
+    );
   }
 }
-

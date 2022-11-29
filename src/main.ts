@@ -4,7 +4,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@lib/errors/http-exception.filter';
 import { TypeormErrorFilter } from '@lib/errors/typeorm.error.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import config from '@common/config';
 import { AppModule } from '@app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -14,7 +13,6 @@ import { join } from 'path';
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import * as express from 'express';
 
-const configService = new ConfigService();
 
 async function bootstrap() {
   await source.initialize();

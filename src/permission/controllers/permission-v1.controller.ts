@@ -8,7 +8,6 @@ import {
   ParseIntPipe,
   Post,
   Body,
-  Res,
   UsePipes,
   ValidationPipe,
   Patch,
