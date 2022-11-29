@@ -19,12 +19,14 @@ import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verificat
 import config from "@config/index";
 import * as bcrypt from "bcrypt";
 import { LoginV1Resource } from "@src/auth/resources/login-v1.resource";
+import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
 
 @Injectable()
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
     @InjectRepository(EmailVerificationTokenEntity) private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
+    @InjectRepository(ForgetPasswordTokenEntity) private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -69,14 +71,22 @@ export class AuthV1Service {
     return 'resendVerification'; // todo : implement resendVerification
   }
 
-  public async forgotPassword(forgetPassDto: ForgotPasswordV1Dto) {
-    const user = await this.userService.findOneByKey('email', forgetPassDto.email);
+  public async forgotPassword(dto: ForgotPasswordV1Dto) {
+    const user = await this.userService.findOneByKey('email', dto.email);
 
-    const password = await encodePassword(generateRandomText(5));
+    if (! user) {
+      throw new NotFoundException('No User associated with email ' + dto.email);
+    }
 
-    const forgotPasswordRequest = this.authMapper.forgotPasswordMapper(user, password, forgetPassDto.token);
+    const newToken = {
+      'user_id' : user.id,
+      token : Math.floor(Math.random()*90000) + 10000
+    }
+    this.forgetPassRepo.create(newToken)
 
-    return await this.forgetPassService.forgetPassword(forgotPasswordRequest);
+    // send email with token
+
+    // return { "please check your email"};
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
