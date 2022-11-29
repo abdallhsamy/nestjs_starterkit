@@ -1,5 +1,4 @@
 import { Repository } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
 
 export default class TranslationRepository<Entity> extends Repository<Entity> {
   static async setTranslations(
@@ -8,11 +7,17 @@ export default class TranslationRepository<Entity> extends Repository<Entity> {
     foreign_key,
     foreign_id,
   ) {
-    for await (const translation of translations) {
-      const translationRecord = translationRepository.create(translation);
+    // start creating records
+    const translationRecords = translationRepository.create(translations);
+
+    // map translations for creating them
+    const translationsRequest = [];
+    for (const translationRecord of translationRecords) {
       translationRecord[foreign_key] = foreign_id;
-      await translationRepository.save(translationRecord);
+      translationsRequest.push(translationRecord);
     }
+    
+    await translationRepository.save(translationsRequest);
   }
 
   static async updateTranslations(

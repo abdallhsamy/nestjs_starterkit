@@ -45,12 +45,8 @@ export class UserV1Service {
   }
 
   async findOne(id?: number) {
-    const user = await this.userRepo.findOneBy({ id: id }).then((value) => {
-      if (!value) {
-        throw new NotFoundException();
-      }
-      return value;
-    });
+    const user = await this.userRepo.findOneBy({ id });
+    if (!user) throw new NotFoundException();
 
     return UserV1Resource.single(user);
   }
@@ -58,21 +54,24 @@ export class UserV1Service {
   async findOneByKey(key: string, value: any) {
     const condition = {};
     condition[key] = value;
+    
     const user = await this.userRepo.findOneBy(condition);
     return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserV1Dto) {
-    const user = await this.userRepo.findOneBy({ id: id }).then((value) => {
-      if (!value) {
-        throw new NotFoundException();
-      }
-      return value;
-    });
-
-    await this.userRepo.update({ id }, {});
+    await this.userRepo.update({ id }, updateUserDto);
 
     return await this.findOne(id);
+  }
+
+  async updateByKey(key: string, value: any, updateUserDto: UpdateUserV1Dto) {
+    const condition = {};
+    condition[key] = value;
+
+    await this.userRepo.update(condition, updateUserDto);
+
+    return await this.findOneByKey(key, value);
   }
 
   async search(name) {

@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsIn,
   IsNotEmpty,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -25,6 +26,9 @@ export class CreateUserV1Dto {
   @IsNotEmpty()
   password;
   birth_date;
+
+  @IsOptional()
+  verified_at: Date;
 
   @IsDefined()
   @IsString()

@@ -3,10 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
+import { AuthTokenEntity } from '@src/auth/entities/auth-token.entity';
+import { ForgetPasswordEntity } from '@src/auth/entities/forget-password.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -49,6 +52,14 @@ export class UserEntity {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deleted_at: Date;
+
+  @Exclude()
+  @OneToMany(() => AuthTokenEntity, (authToken) => authToken.user)
+  authTokens: AuthTokenEntity[];
+
+  @Exclude()
+  @OneToMany(() => ForgetPasswordEntity, (password) => password.user)
+  passwords: ForgetPasswordEntity[];
 
   @Expose()
   get name() {

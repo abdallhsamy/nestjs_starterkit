@@ -35,7 +35,7 @@ export function IsExist(
   validationOptions?: ValidationOptions,
 ) {
   validationOptions = {
-    ...{ message: '$value is not exists.' },
+    ...{ message: 'data is not exists with this $property.' },
     ...validationOptions,
   };
   return function (object: Object, propertyName: string) {

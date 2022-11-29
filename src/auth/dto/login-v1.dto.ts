@@ -10,3 +10,8 @@ export class LoginV1Dto {
   @IsNotEmpty()
   password: string;
 }
+
+export interface CreateAuthTokenInterface {
+  token: string;
+  user_id: number;
+}

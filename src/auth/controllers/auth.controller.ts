@@ -5,7 +5,10 @@ import {
   Body,
   Param,
   Res,
+  Request,
   HttpStatus,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
 import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
@@ -14,6 +17,8 @@ import { LoginV1Dto } from '@src/auth/dto/login-v1.dto';
 import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { getRestfulResponse } from '@src/common/lib/controller-response.helper';
 import { Response } from 'express';
+import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
+import { JwtAuthGuard } from '@src/common/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -34,9 +39,10 @@ export class AuthV1Controller {
     getRestfulResponse(res, HttpStatus.OK, data);
   }
 
-  @Get('verify/:token') // Validates the token sent in the email and activates the user's account
-  async verify(@Param('token') token: string) {
-    return this.service.verify(token);
+  @UseGuards(JwtAuthGuard)
+  @Get('verify') // Validates the token sent in the email and activates the user's account
+  async verify(@Request() req: any) {
+    return await this.service.verify(req.user);
   }
 
   @Get('resend-verification/:email') // Resend verification email
@@ -44,13 +50,14 @@ export class AuthV1Controller {
     return this.service.resendVerification(email);
   }
 
-  @Get('forgot-password/:email') // Send a token via email to reset the password
-  async forgotPassword(@Param('email') email: string) {
-    return this.service.forgotPassword(email);
+  @Post('forgot-password') // Send a token via email to reset the password
+  async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto) {
+    return await this.service.forgotPassword(forgetPasswordDto);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('reset-password') // Change user password
-  async resetPassword(@Body() dto: ResetPasswordV1Dto) {
+  async resetPassword(@Body() dto: ResetPasswordV1Dto, @Request() req: any) {
     return this.service.resetPassword(dto);
   }
 }
