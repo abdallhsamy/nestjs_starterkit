@@ -20,6 +20,11 @@ export class AuthTokenEntity {
   token: string;
 
   @ManyToOne(() => UserEntity, (user) => user.authTokens)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'user_id_fk',
+  })
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
