@@ -21,11 +21,11 @@ export class AuthMapper {
   }
 
   public createAuthTokenMapper(user: UserEntity, token: string) {
-    const authToken = new EmailVerificationTokenEntity();
-    authToken.token = token;
-    authToken.user = user;
+    const emailVerificationToken = new EmailVerificationTokenEntity();
+    emailVerificationToken.token = token;
+    emailVerificationToken.user = user;
 
-    return authToken;
+    return emailVerificationToken;
   }
 
   public forgotPasswordMapper(user: UserEntity, password: string, token: string) {

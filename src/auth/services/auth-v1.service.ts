@@ -22,7 +22,7 @@ import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verificat
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
-    @InjectRepository(EmailVerificationTokenEntity) private authTokenRepo: Repository<EmailVerificationTokenEntity>,
+    @InjectRepository(EmailVerificationTokenEntity) private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -48,9 +48,9 @@ export class AuthV1Service {
     const token = generateToken(userPayload, this.jwtService);
 
     // create auth token in database
-    const authToken = await this.createAuthToken(user, token);
+    const emailVerificationToken = await this.createAuthToken(user, token);
 
-    return { token: authToken.token };
+    return { token: emailVerificationToken.token };
   }
 
   public async verify(currentUser: UserEntity) {
@@ -99,11 +99,11 @@ export class AuthV1Service {
 
   private async createAuthToken(user: UserEntity, token: string) {
     // map auth token data for creating it
-    const authToken = this.authMapper.createAuthTokenMapper(user, token);
+    const emailVerificationToken = this.authMapper.createAuthTokenMapper(user, token);
 
     // create auth token data to database
-    const createAuthTokenData = await this.authTokenRepo.create(authToken);
-    await this.authTokenRepo.save(createAuthTokenData);
+    const createAuthTokenData = await this.emailVerificationTokenRepo.create(emailVerificationToken);
+    await this.emailVerificationTokenRepo.save(createAuthTokenData);
 
     return createAuthTokenData;
   }
