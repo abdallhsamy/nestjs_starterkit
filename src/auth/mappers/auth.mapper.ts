@@ -1,7 +1,7 @@
 import { encodePassword } from '@src/common/lib/utils/bcrypt';
 import { UserEntity } from '@src/user/entities/user.entity';
 import { CreateAuthTokenInterface } from '../dto/login-v1.dto';
-import { AuthTokenEntity } from '../entities/auth-token.entity';
+import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
 
 export class AuthMapper {
   public async prepareRegisterUserDataMapper(registerRequestData: any) {
@@ -21,10 +21,10 @@ export class AuthMapper {
   }
 
   public createAuthTokenMapper(user: UserEntity, token: string) {
-    const authToken = new AuthTokenEntity();
+    const authToken = new EmailVerificationTokenEntity();
     authToken.token = token;
     authToken.user = user;
-    
+
     return authToken;
   }
 

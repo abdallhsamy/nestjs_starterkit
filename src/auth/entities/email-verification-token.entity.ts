@@ -10,15 +10,20 @@ import {
 } from 'typeorm';
 import { UserEntity } from '@src/user/entities/user.entity';
 
-@Entity({ name: 'forget_password' })
-export class ForgetPasswordEntity {
+@Entity({ name: 'email_verification_tokens' })
+export class EmailVerificationTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  password: string;
+  token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.passwords)
+  @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'user_id_fk',
+  })
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })

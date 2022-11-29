@@ -10,19 +10,19 @@ import { comparePasswords, encodePassword } from '@src/common/lib/utils/bcrypt';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JwtService } from '@nestjs/jwt';
 import { generateToken } from '@src/common/lib/utils/jwt';
-import { AuthTokenEntity } from '../entities/auth-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '@src/user/entities/user.entity';
 import { generateRandomText } from '@src/common/lib/utils/random.';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
+import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
 
 @Injectable()
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
-    @InjectRepository(AuthTokenEntity) private authTokenRepo: Repository<AuthTokenEntity>,
+    @InjectRepository(EmailVerificationTokenEntity) private authTokenRepo: Repository<EmailVerificationTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,

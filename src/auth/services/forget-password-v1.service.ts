@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ForgetPasswordEntity } from '../entities/forget-password.entity';
+import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
 
 @Injectable()
 export class ForgetPasswordV1Service {
   constructor(
-    @InjectRepository(ForgetPasswordEntity) private forgetPassRepo: Repository<ForgetPasswordEntity>,
+    @InjectRepository(ForgetPasswordTokenEntity) private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
   ) {}
 
   public async forgetPassword(forgetPasswordRequest: any) {

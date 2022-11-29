@@ -8,18 +8,18 @@ import { LocalStrategy } from '@src/common/strategies/local.strategy';
 import { UserEntity } from '@src/user/entities/user.entity';
 import { UserV1Service } from '@src/user/services/user-v1.service';
 import { UserModule } from '@src/user/user.module';
-import { AuthTokenEntity } from './entities/auth-token.entity';
-import { ForgetPasswordEntity } from './entities/forget-password.entity';
 import { ForgetPasswordV1Service } from './services/forget-password-v1.service';
 import config from '@src/common/config';
 import { JwtStrategy } from '@src/common/strategies/jwt.strategy';
+import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
+import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity,
-      AuthTokenEntity,
-      ForgetPasswordEntity,
+      EmailVerificationTokenEntity,
+      ForgetPasswordTokenEntity,
     ]),
     CacheModule.register(),
     UserModule,
