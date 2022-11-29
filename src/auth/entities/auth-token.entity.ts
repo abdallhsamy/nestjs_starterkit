@@ -11,7 +11,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { UserEntity } from '@src/user/entities/user.entity';
 
-@Entity({ name: 'auth_token' })
+@Entity({ name: 'auth_tokens' })
 export class AuthTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;
