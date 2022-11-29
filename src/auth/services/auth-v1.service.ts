@@ -82,7 +82,7 @@ export class AuthV1Service {
       'user_id' : user.id,
       token : Math.floor(Math.random()*90000) + 10000
     }
-    this.forgetPassRepo.create(newToken)
+    // this.forgetPassRepo.create(newToken)
 
     // send email with token
 
