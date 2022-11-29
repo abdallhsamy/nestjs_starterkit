@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { LoginV1Dto } from '@src/auth/dto/login-v1.dto';
 import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { UserV1Service } from '@src/user/services/user-v1.service';
@@ -27,12 +31,8 @@ export class AuthV1Service {
   }
 
   public async login(dto: LoginV1Dto) {
-    // get user data by email
-    const user = await this.userService.findOneByKey('email', dto.email);
-
-    // check passwords matching
-    const isMatch = await comparePasswords(dto.password, user.password);
-    if (!isMatch) throw new UnprocessableEntityException('Passwords mismatch');
+    // get user data by email with validation on email and password
+    const user = await this.validateLogin(dto.email, dto.password);
 
     // generate token from user payload
     const userPayload = this.authMapper.prepareUserPayload(user);
@@ -55,5 +55,17 @@ export class AuthV1Service {
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
     return 'resetPassword'; // todo : implement resetPassword
+  }
+
+  private async validateLogin(email: string, password: string) {
+    // get user data by email
+    const user = await this.userService.findOneByKey('email', email);
+    if (!user) throw new NotFoundException("User isn't registered");
+
+    // check passwords matching
+    const isMatch = await comparePasswords(password, user.password);
+    if (!isMatch) throw new UnprocessableEntityException('Passwords mismatch');
+
+    return user;
   }
 }

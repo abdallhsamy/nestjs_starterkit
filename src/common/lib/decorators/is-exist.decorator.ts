@@ -10,9 +10,11 @@ import {
 import { DataSource } from 'typeorm';
 
 @ValidatorConstraint({ async: true })
-export class UniqueExistConstraint implements ValidatorConstraintInterface {
-  private connection: DataSource;
-
+export class IsExistConstraint implements ValidatorConstraintInterface {
+  private connection;
+  constructor() {
+    this.connection = new DataSource(ormOptions).initialize();
+  }
   async validate(value: any, args: ValidationArguments) {
     const entity = args.object[`class_entity_${args.property}`];
 
@@ -24,16 +26,16 @@ export class UniqueExistConstraint implements ValidatorConstraintInterface {
     const item = await this.connection
       .getRepository(entity)
       .findOneBy({ [args.property]: value });
-    return !item;
+    return !!item;
   }
 }
 
-export function Unique(
+export function IsExist(
   entity: Function,
   validationOptions?: ValidationOptions,
 ) {
   validationOptions = {
-    ...{ message: '$property already exists.' },
+    ...{ message: '$value is not exists.' },
     ...validationOptions,
   };
   return function (object: Object, propertyName: string) {
@@ -43,7 +45,7 @@ export function Unique(
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: UniqueExistConstraint,
+      validator: IsExistConstraint,
     });
   };
 }

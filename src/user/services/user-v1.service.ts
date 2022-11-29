@@ -59,7 +59,6 @@ export class UserV1Service {
     const condition = {};
     condition[key] = value;
     const user = await this.userRepo.findOneBy(condition);
-    if (!user) throw new NotFoundException();
     return user;
   }
 

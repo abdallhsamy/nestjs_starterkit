@@ -25,13 +25,13 @@ export class RegisterV1Dto {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  // @Unique(UserEntity)
+  @Unique(UserEntity)
   email: string;
 
   @IsString()
   @IsNotEmpty()
   @IsPhoneNumber()
-  // @Unique(UserEntity)
+  @Unique(UserEntity)
   phone_number: string;
 
   @IsString()
