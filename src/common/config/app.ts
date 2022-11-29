@@ -13,5 +13,9 @@ export default {
 
   global_prefix: '',
 
+  secret_key: configService.get('SECRET_KEY', 'secretKey'),
+
   enable_swagger: configService.get('ENABLE_SWAGGER', false),
+
+  token_expire: configService.get('TOKEN_EXPIRE', false),
 };

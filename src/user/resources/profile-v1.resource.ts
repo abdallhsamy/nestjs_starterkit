@@ -9,7 +9,7 @@ export class ProfileV1Resource extends ResourceResponse {
   }
 
   static collection(users: UserEntity[]) {
-    return users.map((user : UserEntity) => this.#toArray(user));
+    return users.map((user: UserEntity) => this.#toArray(user));
   }
 
   static #toArray(user: UserEntity) {
