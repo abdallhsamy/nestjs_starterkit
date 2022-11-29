@@ -57,8 +57,12 @@ export class AuthV1Service {
     return LoginV1Resource.single(user, emailVerificationToken.token);
   }
 
-  public async verify(currentUser: UserEntity) {
-    return await this.userService.update(currentUser.id, { verified_at: new Date() });
+  public async verify(token: string){
+    // user_id = db.table('email_verification_tokens').where('token' = 'token).where('created_at' >= DATE('created_at + 10 minutes').limit(1));
+    // user = userentity.findOne(user_id);
+    // user..update.email_verified_at = new Date();
+
+    // return { "email verified successfully"};
   }
 
   public async resendVerification(email: string) {
