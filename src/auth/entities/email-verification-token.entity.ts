@@ -16,10 +16,10 @@ export class EmailVerificationTokenEntity {
   id: number;
 
   @Column()
-  token: string;
+  user_id: number;
 
   @Column()
-  user_id: number;
+  token: string;
 
   @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens)
   @JoinColumn({
