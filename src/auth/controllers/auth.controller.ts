@@ -42,10 +42,9 @@ export class AuthV1Controller {
     getRestfulResponse(res, HttpStatus.OK, data);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('verify') // Validates the token sent in the email and activates the user's account
-  async verify(@Request() req: any) {
-    return await this.service.verify(req.user);
+  async verify(@Query('token') token: string) {
+    return await this.service.verify(token);
   }
 
   @Get('resend-verification/:email') // Resend verification email

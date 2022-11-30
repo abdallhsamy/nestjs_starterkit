@@ -18,7 +18,15 @@ export class ForgetPasswordTokenEntity {
   @Column()
   password: string;
 
+  @Column()
+  user_id: number;
+
   @ManyToOne(() => UserEntity, (user) => user.passwords)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'user_id_fk',
+  })
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })

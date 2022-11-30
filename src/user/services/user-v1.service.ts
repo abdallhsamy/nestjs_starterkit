@@ -6,6 +6,7 @@ import { UserV1Resource } from '../resources/user-v1.resource.js';
 import { NotFoundException } from '@nestjs/common';
 import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
 import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
+import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
 
 export class UserV1Service {
   constructor(
@@ -42,6 +43,14 @@ export class UserV1Service {
     await this.userRepo.save(user);
 
     return await this.findOne(user.id);
+  }
+
+  async register(dto: RegisterV1Dto) {
+    const user = this.userRepo.create(dto);
+
+    await this.userRepo.save(user);
+
+    return user;
   }
 
   async findOne(id?: number) {
