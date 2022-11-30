@@ -1,6 +1,5 @@
 import { encodePassword } from '@src/common/lib/utils/bcrypt';
 import { UserEntity } from '@src/user/entities/user.entity';
-import { CreateAuthTokenInterface } from '../dto/login-v1.dto';
 import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
 
 export class AuthMapper {
@@ -8,27 +7,30 @@ export class AuthMapper {
     registerRequestData.password = await encodePassword(
       registerRequestData.password,
     );
+    registerRequestData.password_confirmation = undefined;
     return registerRequestData;
   }
 
-  public prepareUserPayload(user: UserEntity) {
+  public prepareUserPayload(user: any) {
     return {
       sub: user.id,
-      name: `${user.first_name} ${user.last_name}`,
-      email: user.email,
-      phone: user.phone_number,
+      name: user.name,
     };
   }
 
-  public createAuthTokenMapper(user: UserEntity, token: string) {
+  public createAuthTokenMapper(user: UserEntity, token: number) {
     const emailVerificationToken = new EmailVerificationTokenEntity();
-    emailVerificationToken.token = token;
+    emailVerificationToken.token = `${token}`;
     emailVerificationToken.user = user;
 
     return emailVerificationToken;
   }
 
-  public forgotPasswordMapper(user: UserEntity, password: string, token: string) {
+  public forgotPasswordMapper(
+    user: UserEntity,
+    password: string,
+    token: string,
+  ) {
     return { user, password, token };
   }
 }

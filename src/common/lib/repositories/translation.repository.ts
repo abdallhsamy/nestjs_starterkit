@@ -16,7 +16,7 @@ export default class TranslationRepository<Entity> extends Repository<Entity> {
       translationRecord[foreign_key] = foreign_id;
       translationsRequest.push(translationRecord);
     }
-    
+
     await translationRepository.save(translationsRequest);
   }
 

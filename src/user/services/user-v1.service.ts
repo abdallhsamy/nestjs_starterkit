@@ -54,7 +54,7 @@ export class UserV1Service {
   async findOneByKey(key: string, value: any) {
     const condition = {};
     condition[key] = value;
-    
+
     const user = await this.userRepo.findOneBy(condition);
     return user;
   }

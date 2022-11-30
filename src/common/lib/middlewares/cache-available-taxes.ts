@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Cache } from 'cache-manager';
-import { getAvailableTaxes } from '../utils/methods';
 
 @Injectable()
 export class CacheAvailableTaxesMiddleware implements NestMiddleware {

@@ -11,6 +11,8 @@ export default {
 
   port: configService.get('APP_PORT', 80),
 
+  host: configService.get('APP_HOST'),
+
   global_prefix: '',
 
   secret_key: configService.get('SECRET_KEY', 'secretKey'),

@@ -4,7 +4,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@lib/errors/http-exception.filter';
 import { TypeormErrorFilter } from '@lib/errors/typeorm.error.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import config from '@common/config';
 import { AppModule } from '@app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -14,15 +13,14 @@ import { join } from 'path';
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import * as express from 'express';
 
-const configService = new ConfigService();
 
 async function bootstrap() {
   await source.initialize();
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useGlobalPipes(new TypeormErrorFilter());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalPipes(new TypeormErrorFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.enableCors();
@@ -48,7 +46,7 @@ async function bootstrap() {
   const bodyParser = require('body-parser');
   app.use(bodyParser.json({ limit: '5mb' }));
   app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
-  app.useGlobalFilters(new AllExceptionsFilter());
+  // app.useGlobalFilters(new AllExceptionsFilter());
 
   /* SECURITY */
   app.enable('trust proxy');

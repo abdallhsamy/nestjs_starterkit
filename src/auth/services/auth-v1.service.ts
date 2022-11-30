@@ -15,18 +15,22 @@ import { UserEntity } from '@src/user/entities/user.entity';
 import { generateRandomText } from '@src/common/lib/utils/random.';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
-import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
-import config from "@config/index";
-import * as bcrypt from "bcrypt";
-import { LoginV1Resource } from "@src/auth/resources/login-v1.resource";
-import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
+import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
+import config from '@config/index';
+import * as bcrypt from 'bcrypt';
+import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
+import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
+import { generateToken } from '@src/common/lib/utils/jwt';
+import { RegisterV1Dto } from '../dto/register-v1.dto';
 
 @Injectable()
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
-    @InjectRepository(EmailVerificationTokenEntity) private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
-    @InjectRepository(ForgetPasswordTokenEntity) private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
+    @InjectRepository(EmailVerificationTokenEntity)
+    private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
+    @InjectRepository(ForgetPasswordTokenEntity)
+    private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -34,36 +38,43 @@ export class AuthV1Service {
     this.authMapper = new AuthMapper();
   }
 
-  public async register(dto: any) {
+  public async register(dto: RegisterV1Dto) {
+    console.log("hello")
     const registerRequestData =
       await this.authMapper.prepareRegisterUserDataMapper(dto);
 
-    return await this.userService.create(registerRequestData);
+    await this.userService.create(registerRequestData);
+
+    // generate user token
+    const token = Math.floor(Math.random() * 90000) + 10000;
+
+    // create auth token in database
+    await this.createAuthToken(registerRequestData, token);
+
+    // todo: send email with verify link
+    
   }
 
   public async login(dto: LoginV1Dto) {
     const user = await this.getUserByKey('email', dto.email);
 
-    if (! bcrypt.compareSync(dto.password, user.password)) {
+    if (!bcrypt.compareSync(dto.password, user.password)) {
       throw new UnprocessableEntityException('Passwords mismatch');
     }
 
     const userPayload = this.authMapper.prepareUserPayload(user);
 
-    const jwt = new JwtService()
+    const jwt = new JwtService();
 
     const token = jwt.sign(userPayload, { secret: config('app.secret_key') });
 
-    const emailVerificationToken = await this.createAuthToken(user, token);
-
-    return LoginV1Resource.single(user, emailVerificationToken.token);
+    return LoginV1Resource.single(user, token);
   }
 
-  public async verify(token: string){
+  public async verify(token: string) {
     // user_id = db.table('email_verification_tokens').where('token' = 'token).where('created_at' >= DATE('created_at + 10 minutes').limit(1));
     // user = userentity.findOne(user_id);
     // user..update.email_verified_at = new Date();
-
     // return { "email verified successfully"};
   }
 
@@ -74,14 +85,14 @@ export class AuthV1Service {
   public async forgotPassword(dto: ForgotPasswordV1Dto) {
     const user = await this.userService.findOneByKey('email', dto.email);
 
-    if (! user) {
+    if (!user) {
       throw new NotFoundException('No User associated with email ' + dto.email);
     }
 
     const newToken = {
-      'user_id' : user.id,
-      token : Math.floor(Math.random()*90000) + 10000
-    }
+      user_id: user.id,
+      token: Math.floor(Math.random() * 90000) + 10000,
+    };
     // this.forgetPassRepo.create(newToken)
 
     // send email with token
@@ -94,7 +105,6 @@ export class AuthV1Service {
   }
 
   private async getUserByKey(key: string, value: any) {
-
     const user = await this.userService.findOneByKey(key, value);
 
     if (!user) throw new NotFoundException("User isn't registered");
@@ -102,25 +112,28 @@ export class AuthV1Service {
     return user;
   }
 
-  private async createAuthToken(user: UserEntity, token: string) {
-
-    const emailVerificationToken = this.authMapper.createAuthTokenMapper(user, token);
-
-    const createAuthTokenData = await this.emailVerificationTokenRepo.create(emailVerificationToken);
-
-    await this.emailVerificationTokenRepo.save(createAuthTokenData);
-
-    return createAuthTokenData;
-  }
-
   public async validateLogin(email: string, password: string) {
-
     const user = await this.getUserByKey('email', email);
 
-    if (! comparePasswords(password, user.password)) {
+    if (!comparePasswords(password, user.password)) {
       throw new UnprocessableEntityException('Passwords mismatch');
     }
 
     return user;
+  }
+
+  private async createAuthToken(user: any, token: number) {
+    const emailVerificationToken = this.authMapper.createAuthTokenMapper(
+      user,
+      token,
+    );
+
+    const createAuthTokenData = await this.emailVerificationTokenRepo.create(
+      emailVerificationToken,
+    );
+
+    await this.emailVerificationTokenRepo.save(createAuthTokenData);
+
+    return createAuthTokenData;
   }
 }

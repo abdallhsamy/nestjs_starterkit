@@ -1,11 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
-import { ApiResponse } from '@lib/errors/api-response';
+import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { UserV1Resource } from '../resources/user-v1.resource.js';
 import { NotFoundException } from '@nestjs/common';
-import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
-import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
 import { UpdateProfileV1Dto } from '@src/user/dto/update-profile-v1.dto';
 import { ProfileV1Resource } from '@src/user/resources/profile-v1.resource';
 
