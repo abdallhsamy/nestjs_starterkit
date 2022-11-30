@@ -8,8 +8,8 @@ import {
   Request,
   HttpStatus,
   Query,
-  UseGuards,
-} from '@nestjs/common';
+  UseGuards, Render
+} from "@nestjs/common";
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
 import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -28,6 +28,7 @@ export class AuthV1Controller {
   constructor(private readonly service: AuthV1Service) {}
 
   @Post('register')
+  @Render('email_verification.mail')
   async register(@Body() dto: RegisterV1Dto, @Res() res: Response) {
     await this.service.register(dto);
 
@@ -43,7 +44,7 @@ export class AuthV1Controller {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('verify') // Validates the token sent in the email and activates the user's account
+  @Get('verify-email')
   async verify(@Request() req: any) {
     return await this.service.verify(req.user);
   }

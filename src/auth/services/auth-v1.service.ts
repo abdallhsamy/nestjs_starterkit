@@ -22,6 +22,7 @@ import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
 import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
 import { generateToken } from '@src/common/lib/utils/jwt';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
+import { MailerService } from "@nestjs-modules/mailer";
 
 @Injectable()
 export class AuthV1Service {
@@ -35,29 +36,42 @@ export class AuthV1Service {
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    private mailerService: MailerService
   ) {
     this.authMapper = new AuthMapper();
   }
 
   public async register(dto: RegisterV1Dto) {
-
     dto.password = await encodePassword(dto.password);
 
     const user = this.userRepo.create(dto);
 
     await this.userRepo.save(user);
 
-    const token = Math.floor(Math.random() * 90000) + 10000;
-
-
-    const emailVerificationToken = {
+    const verificationToken = {
       token : (Math.floor(Math.random() * 90000) + 10000).toString(),
       user_id : user.id,
     }
 
-    await this.emailVerificationTokenRepo.save(emailVerificationToken);
+    await this.emailVerificationTokenRepo.save(verificationToken);
 
-    // todo: send email with verify link
+    const html = `<p>Hi ${user.name},</p>
+<p>
+  please click here to verify your email
+  <a href="${config('app.url') + '/v1/auth/verify-email'}" target="_blank">${verificationToken.token}</a>
+</p>`
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Verify email',
+      // template: './email_verification.mail',
+      html: html,
+      context: {
+        name: user.name,
+        url : config('app.url') + '/v1/auth/verify-email',
+        token : verificationToken.token
+      }
+    })
   }
 
   public async login(dto: LoginV1Dto) {
