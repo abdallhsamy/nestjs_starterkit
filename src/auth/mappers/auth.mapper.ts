@@ -7,21 +7,20 @@ export class AuthMapper {
     registerRequestData.password = await encodePassword(
       registerRequestData.password,
     );
+    registerRequestData.password_confirmation = undefined;
     return registerRequestData;
   }
 
-  public prepareUserPayload(user: UserEntity) {
+  public prepareUserPayload(user: any) {
     return {
       sub: user.id,
-      name: `${user.first_name} ${user.last_name}`,
-      email: user.email,
-      phone: user.phone_number,
+      name: user.name,
     };
   }
 
-  public createAuthTokenMapper(user: UserEntity, token: string) {
+  public createAuthTokenMapper(user: UserEntity, token: number) {
     const emailVerificationToken = new EmailVerificationTokenEntity();
-    emailVerificationToken.token = token;
+    emailVerificationToken.token = `${token}`;
     emailVerificationToken.user = user;
 
     return emailVerificationToken;

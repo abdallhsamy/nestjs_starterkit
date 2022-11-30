@@ -19,8 +19,8 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useGlobalPipes(new TypeormErrorFilter());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalPipes(new TypeormErrorFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.enableCors();
@@ -46,7 +46,7 @@ async function bootstrap() {
   const bodyParser = require('body-parser');
   app.use(bodyParser.json({ limit: '5mb' }));
   app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
-  app.useGlobalFilters(new AllExceptionsFilter());
+  // app.useGlobalFilters(new AllExceptionsFilter());
 
   /* SECURITY */
   app.enable('trust proxy');
