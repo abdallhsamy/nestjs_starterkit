@@ -8,18 +8,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 import { UserEntity } from '@src/user/entities/user.entity';
 
-@Entity({ name: 'auth_token' })
-export class AuthTokenEntity {
+@Entity({ name: 'forget_password_tokens' })
+export class ForgetPasswordTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  token: string;
+  password: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.authTokens)
+  @ManyToOne(() => UserEntity, (user) => user.passwords)
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })

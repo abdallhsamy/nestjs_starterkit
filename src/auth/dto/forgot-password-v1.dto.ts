@@ -5,8 +5,4 @@ export class ForgotPasswordV1Dto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
-
-  @IsString()
-  @IsOptional()
-  token: string;
 }

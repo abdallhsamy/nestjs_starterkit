@@ -27,13 +27,16 @@ import { JwtAuthGuard } from '@src/common/guards/jwt-auth.guard';
 export class AuthV1Controller {
   constructor(private readonly service: AuthV1Service) {}
 
-  @Post('register') // Register a new user
+  @Post('register')
   async register(@Body() dto: RegisterV1Dto, @Res() res: Response) {
-    const data = await this.service.register(dto);
-    getRestfulResponse(res, HttpStatus.CREATED, data);
+    await this.service.register(dto);
+
+    return res.status(HttpStatus.CREATED).json({
+      message : 'account registered successfully, please check your email'
+    });
   }
 
-  @Post('login') // Login user
+  @Post('login')
   async login(@Body() dto: LoginV1Dto, @Res() res: Response) {
     const data = await this.service.login(dto);
     getRestfulResponse(res, HttpStatus.OK, data);

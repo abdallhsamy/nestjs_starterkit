@@ -9,21 +9,26 @@ import { UserV1Service } from '@src/user/services/user-v1.service';
 import { comparePasswords, encodePassword } from '@src/common/lib/utils/bcrypt';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JwtService } from '@nestjs/jwt';
-import { generateToken } from '@src/common/lib/utils/jwt';
-import { AuthTokenEntity } from '../entities/auth-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '@src/user/entities/user.entity';
 import { generateRandomText } from '@src/common/lib/utils/random.';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
+import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
+import config from "@config/index";
+import * as bcrypt from "bcrypt";
+import { LoginV1Resource } from "@src/auth/resources/login-v1.resource";
+import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
 
 @Injectable()
 export class AuthV1Service {
   private authMapper: AuthMapper;
   constructor(
-    @InjectRepository(AuthTokenEntity)
-    private authTokenRepo: Repository<AuthTokenEntity>,
+    @InjectRepository(EmailVerificationTokenEntity)
+    private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
+    @InjectRepository(ForgetPasswordTokenEntity)
+    private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -32,89 +37,92 @@ export class AuthV1Service {
   }
 
   public async register(dto: any) {
-    // prepare user data for registeration
     const registerRequestData =
       await this.authMapper.prepareRegisterUserDataMapper(dto);
 
-    // start register user
     return await this.userService.create(registerRequestData);
   }
 
   public async login(dto: LoginV1Dto) {
-    // get user data by email with validation on email and password
-    const user = await this.validateLogin(dto.email, dto.password);
+    const user = await this.getUserByKey('email', dto.email);
 
-    // generate token from user payload
+    if (! bcrypt.compareSync(dto.password, user.password)) {
+      throw new UnprocessableEntityException('Passwords mismatch');
+    }
+
     const userPayload = this.authMapper.prepareUserPayload(user);
-    const token = generateToken(userPayload, this.jwtService);
 
-    // create auth token in database
-    const authToken = await this.createAuthToken(user, token);
+    const jwt = new JwtService()
 
-    return { token: authToken.token };
+    const token = jwt.sign(userPayload, { secret: config('app.secret_key') });
+
+    const emailVerificationToken = await this.createAuthToken(user, token);
+
+    return LoginV1Resource.single(user, emailVerificationToken.token);
   }
 
-  public async verify(currentUser: UserEntity) {
-    return await this.userService.update(currentUser.id, {
-      verified_at: new Date(),
-    });
+  public async verify(token: string){
+    // user_id = db.table('email_verification_tokens').where('token' = 'token).where('created_at' >= DATE('created_at + 10 minutes').limit(1));
+    // user = userentity.findOne(user_id);
+    // user..update.email_verified_at = new Date();
+
+    // return { "email verified successfully"};
   }
 
   public async resendVerification(email: string) {
     return 'resendVerification'; // todo : implement resendVerification
   }
 
-  public async forgotPassword(forgetPassDto: ForgotPasswordV1Dto) {
-    // fetch user data by email
-    const user = await this.userService.findOneByKey(
-      'email',
-      forgetPassDto.email,
-    );
+  public async forgotPassword(dto: ForgotPasswordV1Dto) {
+    const user = await this.userService.findOneByKey('email', dto.email);
 
-    // generate password instead of the forgotten one and hash it
-    const password = await encodePassword(generateRandomText(5));
+    if (! user) {
+      throw new NotFoundException('No User associated with email ' + dto.email);
+    }
 
-    // map forget password request
-    const forgotPasswordRequest = this.authMapper.forgotPasswordMapper(
-      user,
-      password,
-      forgetPassDto.token,
-    );
+    const newToken = {
+      'user_id' : user.id,
+      token : Math.floor(Math.random()*90000) + 10000
+    }
+    // this.forgetPassRepo.create(newToken)
 
-    // create new password for the user and save in forget password table
-    return await this.forgetPassService.forgetPassword(forgotPasswordRequest);
+    // send email with token
+
+    // return { "please check your email"};
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
     return 'resetPassword'; // todo : implement resetPassword
   }
 
-  public async validateLogin(email: string, password: string) {
-    // get user data by email
-    const user = await this.getUserByKey('email', email);
-
-    // check passwords matching
-    const isMatch = await comparePasswords(password, user.password);
-    if (!isMatch) throw new UnprocessableEntityException('Passwords mismatch');
-
-    return user;
-  }
-
   private async getUserByKey(key: string, value: any) {
+
     const user = await this.userService.findOneByKey(key, value);
+
     if (!user) throw new NotFoundException("User isn't registered");
 
     return user;
   }
 
   private async createAuthToken(user: UserEntity, token: string) {
-    // map auth token data for creating it
-    const authToken = this.authMapper.createAuthTokenMapper(user, token);
 
-    // create auth token data to database
-    const createAuthTokenData = await this.authTokenRepo.create(authToken);
-    await this.authTokenRepo.save(createAuthTokenData);
+    const emailVerificationToken = this.authMapper.createAuthTokenMapper(user, token);
+
+    const createAuthTokenData = await this.emailVerificationTokenRepo.create(emailVerificationToken);
+
+    await this.emailVerificationTokenRepo.save(createAuthTokenData);
 
     return createAuthTokenData;
+  }
+
+  public async validateLogin(email: string, password: string) {
+
+    const user = await this.getUserByKey('email', email);
+
+    if (! comparePasswords(password, user.password)) {
+      throw new UnprocessableEntityException('Passwords mismatch');
+    }
+
+    return user;
   }
 }
