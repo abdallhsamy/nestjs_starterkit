@@ -18,6 +18,9 @@ export class EmailVerificationTokenEntity {
   @Column()
   token: string;
 
+  @Column()
+  user_id: number;
+
   @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens)
   @JoinColumn({
     name: 'user_id',

@@ -19,7 +19,7 @@ export default {
 
   db_password: configService.get('DATABASE_PASSWORD', 'password'),
 
-  sync: configService.get('DATABASE_SYNCHRONIZE', false),
+  sync: configService.get('DATABASE_SYNCHRONIZE') == true,
 
   ENABLE_SWAGGER: configService.get('ENABLE_SWAGGER', false),
 

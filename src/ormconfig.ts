@@ -9,7 +9,7 @@ export const ormOptions: any = {
   password: config('database.db_password'),
   database: config('database.db_name'),
   entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
-  synchronize: false,
+  synchronize: config('database.sync'),
   logging: config('database.loq_queries'),
 };
 const source = new DataSource(ormOptions);

@@ -34,25 +34,30 @@ export class AuthV1Service {
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) {
     this.authMapper = new AuthMapper();
   }
 
   public async register(dto: RegisterV1Dto) {
-    console.log("hello")
-    const registerRequestData =
-      await this.authMapper.prepareRegisterUserDataMapper(dto);
 
-    await this.userService.create(registerRequestData);
+    dto.password = await encodePassword(dto.password);
 
-    // generate user token
+    const user = this.userRepo.create(dto);
+
+    await this.userRepo.save(user);
+
     const token = Math.floor(Math.random() * 90000) + 10000;
 
-    // create auth token in database
-    await this.createAuthToken(registerRequestData, token);
+
+    const emailVerificationToken = {
+      token : (Math.floor(Math.random() * 90000) + 10000).toString(),
+      user_id : user.id,
+    }
+
+    await this.emailVerificationTokenRepo.save(emailVerificationToken);
 
     // todo: send email with verify link
-    
   }
 
   public async login(dto: LoginV1Dto) {
@@ -122,18 +127,18 @@ export class AuthV1Service {
     return user;
   }
 
-  private async createAuthToken(user: any, token: number) {
-    const emailVerificationToken = this.authMapper.createAuthTokenMapper(
-      user,
-      token,
-    );
-
-    const createAuthTokenData = await this.emailVerificationTokenRepo.create(
-      emailVerificationToken,
-    );
-
-    await this.emailVerificationTokenRepo.save(createAuthTokenData);
-
-    return createAuthTokenData;
-  }
+  // private async createAuthToken(user: any, token: number) {
+  //   const emailVerificationToken = this.authMapper.createAuthTokenMapper(
+  //     user,
+  //     token,
+  //   );
+  //
+  //   const createAuthTokenData = await this.emailVerificationTokenRepo.create(
+  //     emailVerificationToken,
+  //   );
+  //
+  //   await this.emailVerificationTokenRepo.save(createAuthTokenData);
+  //
+  //   return createAuthTokenData;
+  // }
 }
