@@ -29,7 +29,11 @@ export class EmailVerificationTokenEntity {
   })
   user: UserEntity;
 
-  @CreateDateColumn({ name: 'created_at', nullable: true })
+  @CreateDateColumn({
+    name: 'created_at',
+    nullable: true,
+    default : () => 'CURRENT_TIMESTAMP(6)',
+  })
   created_at: Date;
 
   @UpdateDateColumn({
