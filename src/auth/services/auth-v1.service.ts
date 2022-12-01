@@ -11,7 +11,6 @@ import { AuthMapper } from '../mappers/auth.mapper';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
 import config from '@config/index';
@@ -19,7 +18,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
 import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
-import { MailService } from '@src/common/mail/mail.service';
+import { MailService } from '@src/mail/mail.service';
 
 @Injectable()
 export class AuthV1Service {
@@ -30,8 +29,6 @@ export class AuthV1Service {
     @InjectRepository(ForgetPasswordTokenEntity)
     private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
     private readonly userService: UserV1Service,
-    private readonly forgetPassService: ForgetPasswordV1Service,
-    private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {
     this.authMapper = new AuthMapper();
@@ -47,13 +44,10 @@ export class AuthV1Service {
 
     const verificationToken = await this.createAuthToken(registeredUser, token);
 
+    await this.emailVerificationTokenRepo.save(verificationToken);
+
     // if it isn't working so comment the mail request
-    await this.mailService.sendEmailVerificationMail(
-      verificationToken.user,
-      verificationToken.token,
-      'Verify email',
-      '/v1/auth/verify',
-    );
+    await this.mailService.sendUserConfirmation(registeredUser, verificationToken.token);
   }
 
   public async login(dto: LoginV1Dto) {
@@ -113,7 +107,6 @@ export class AuthV1Service {
     await this.mailService.sendForgetPasswordMail(
       forgotPass.user,
       forgotPass.token,
-      'Reset Password email', // subject
     );
 
     return { message: 'please check your email' };

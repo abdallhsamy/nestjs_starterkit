@@ -11,10 +11,9 @@ import { UserModule } from '@src/user/user.module';
 import { ForgetPasswordV1Service } from './services/forget-password-v1.service';
 import config from '@src/common/config';
 import { JwtStrategy } from '@src/common/strategies/jwt.strategy';
-import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
-import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
-import { MailModule } from '@src/common/lib/services/mail/mail.module';
-import { MailService } from '@src/common/mail/mail.service';
+import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
+import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
+import { MailModule } from "@src/mail/mail.module";
 
 @Module({
   imports: [
@@ -25,8 +24,8 @@ import { MailService } from '@src/common/mail/mail.service';
     ]),
     CacheModule.register(),
     UserModule,
-    PassportModule,
     MailModule,
+    PassportModule,
     PassportModule.register({ session: false, defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: config('app.secret_key'),
@@ -35,7 +34,6 @@ import { MailService } from '@src/common/mail/mail.service';
   ],
   controllers: [AuthV1Controller],
   providers: [
-    MailService,
     AuthV1Service,
     UserV1Service,
     ForgetPasswordV1Service,
