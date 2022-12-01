@@ -10,7 +10,7 @@ import { comparePasswords, encodePassword } from '@src/common/lib/utils/bcrypt';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
@@ -19,7 +19,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
 import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
-import { MailerService } from "@nestjs-modules/mailer";
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthV1Service {
@@ -32,16 +32,16 @@ export class AuthV1Service {
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
-    private mailerService: MailerService
+    private mailerService: MailerService,
   ) {
     this.authMapper = new AuthMapper();
   }
 
   public async register(dto: RegisterV1Dto) {
-    const registerRequestData =
-      await this.authMapper.prepareRegisterUserDataMapper(dto);
+    dto.password = await encodePassword(dto.password);
+    dto.password_confirmation = undefined;
 
-    const registeredUser = await this.userService.register(registerRequestData);
+    const registeredUser = await this.userService.register(dto);
 
     const token = Math.floor(Math.random() * 90000) + 10000;
 
@@ -85,12 +85,17 @@ export class AuthV1Service {
 
   public async verify(token: string) {
     // fetch token data and verify it
-    const VertokenData = await this.emailVerificationTokenRepo.findOneBy({ token });
-    const isExpired = VertokenData.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
-    if (!!isExpired) throw new NotFoundException("Token expired or not found");
+    const VertokenData = await this.emailVerificationTokenRepo.findOneBy({
+      token,
+    });
+    const isExpired =
+      VertokenData.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
+    if (!!isExpired) throw new NotFoundException('Token expired or not found');
 
-    await this.userService.update(VertokenData.user_id, { verified_at: new Date() });
-    return { message: "email verified successfully" };
+    await this.userService.update(VertokenData.user_id, {
+      verified_at: new Date(),
+    });
+    return { message: 'email verified successfully' };
   }
 
   public async resendVerification(email: string) {

@@ -1,6 +1,6 @@
 import { encodePassword } from '@src/common/lib/utils/bcrypt';
 import { UserEntity } from '@src/user/entities/user.entity';
-import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
+import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
 
 export class AuthMapper {
   public async prepareRegisterUserDataMapper(registerRequestData: any) {

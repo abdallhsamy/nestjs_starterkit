@@ -18,7 +18,7 @@ export class EmailVerificationTokenEntity {
   @Column()
   user_id: number;
 
-  @Column({ type: 'varchar', length: 25, nullable: false})
+  @Column({ type: 'varchar', length: 25, nullable: false })
   token: string;
 
   @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens)
@@ -32,7 +32,7 @@ export class EmailVerificationTokenEntity {
   @CreateDateColumn({
     name: 'created_at',
     nullable: true,
-    default : () => 'CURRENT_TIMESTAMP(6)',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   created_at: Date;
 

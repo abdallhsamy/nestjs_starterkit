@@ -1,5 +1,5 @@
 import { ResourceResponse } from '@lib/classes/resource-response';
-import { UserEntity } from "@src/user/entities/user.entity";
+import { UserEntity } from '@src/user/entities/user.entity';
 
 export class LoginV1Resource extends ResourceResponse {
   static single(user: UserEntity, token: string) {

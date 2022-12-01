@@ -8,8 +8,9 @@ import {
   Request,
   HttpStatus,
   Query,
-  UseGuards, Render
-} from "@nestjs/common";
+  UseGuards,
+  Render,
+} from '@nestjs/common';
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
 import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -33,7 +34,7 @@ export class AuthV1Controller {
     await this.service.register(dto);
 
     return res.status(HttpStatus.CREATED).json({
-      message : 'account registered successfully, please check your email'
+      message: 'account registered successfully, please check your email',
     });
   }
 

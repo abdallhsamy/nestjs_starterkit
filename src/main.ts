@@ -13,7 +13,6 @@ import { join } from 'path';
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import * as express from 'express';
 
-
 async function bootstrap() {
   await source.initialize();
 

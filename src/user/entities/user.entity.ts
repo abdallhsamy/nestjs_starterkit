@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude, Expose } from 'class-transformer';
-import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
-import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
+import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
+import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -54,7 +54,10 @@ export class UserEntity {
   deleted_at: Date;
 
   @Exclude()
-  @OneToMany(() => EmailVerificationTokenEntity, (emailVerificationToken) => emailVerificationToken.user)
+  @OneToMany(
+    () => EmailVerificationTokenEntity,
+    (emailVerificationToken) => emailVerificationToken.user,
+  )
   emailVerificationTokens: EmailVerificationTokenEntity[];
 
   @Exclude()
