@@ -13,6 +13,7 @@ import config from '@src/common/config';
 import { JwtStrategy } from '@src/common/strategies/jwt.strategy';
 import { EmailVerificationTokenEntity } from "@src/auth/entities/email-verification-token.entity";
 import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-token.entity";
+import { MailModule } from "@src/mail/mail.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ForgetPasswordTokenEntity } from "@src/auth/entities/forget-password-to
     ]),
     CacheModule.register(),
     UserModule,
+    MailModule,
     PassportModule,
     PassportModule.register({ session: false, defaultStrategy: 'jwt' }),
     JwtModule.register({

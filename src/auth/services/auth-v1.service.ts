@@ -23,6 +23,7 @@ import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-to
 import { generateToken } from '@src/common/lib/utils/jwt';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
 import { MailerService } from "@nestjs-modules/mailer";
+import { MailService } from "@src/mail/mail.service";
 
 @Injectable()
 export class AuthV1Service {
@@ -36,7 +37,7 @@ export class AuthV1Service {
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-    private mailerService: MailerService
+    private mailService: MailService
   ) {
     this.authMapper = new AuthMapper();
   }
@@ -55,23 +56,23 @@ export class AuthV1Service {
 
     await this.emailVerificationTokenRepo.save(verificationToken);
 
-    const html = `<p>Hi ${user.name},</p>
-<p>
-  please click here to verify your email
-  <a href="${config('app.url') + '/v1/auth/verify-email'}" target="_blank">${verificationToken.token}</a>
-</p>`
-
-    await this.mailerService.sendMail({
-      to: user.email,
-      subject: 'Verify email',
-      // template: './email_verification.mail',
-      html: html,
-      context: {
-        name: user.name,
-        url : config('app.url') + '/v1/auth/verify-email',
-        token : verificationToken.token
-      }
-    })
+//     const html = `<p>Hi ${user.name},</p>
+// <p>
+//   please click here to verify your email
+//   <a href="${config('app.url') + '/v1/auth/verify-email'}" target="_blank">${verificationToken.token}</a>
+// </p>`
+    await this.mailService.sendUserConfirmation(user, verificationToken.token);
+    // await this.mailerService.sendMail({
+    //   to: user.email,
+    //   subject: 'Verify email',
+    //   // template: './email_verification.mail',
+    //   html: html,
+    //   context: {
+    //     name: user.name,
+    //     url : config('app.url') + '/v1/auth/verify-email',
+    //     token : verificationToken.token
+    //   }
+    // })
   }
 
   public async login(dto: LoginV1Dto) {
