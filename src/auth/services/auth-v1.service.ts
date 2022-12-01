@@ -47,7 +47,10 @@ export class AuthV1Service {
     await this.emailVerificationTokenRepo.save(verificationToken);
 
     // if it isn't working so comment the mail request
-    await this.mailService.sendUserConfirmation(registeredUser, verificationToken.token);
+    await this.mailService.sendUserConfirmation(
+      registeredUser,
+      verificationToken.token,
+    );
   }
 
   public async login(dto: LoginV1Dto) {
