@@ -16,10 +16,10 @@ export class ForgetPasswordTokenEntity {
   id: number;
 
   @Column()
-  password: string;
-
-  @Column()
   user_id: number;
+
+  @Column({ unique : true })
+  token: string;
 
   @ManyToOne(() => UserEntity, (user) => user.passwords)
   @JoinColumn({

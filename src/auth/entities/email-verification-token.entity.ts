@@ -18,7 +18,7 @@ export class EmailVerificationTokenEntity {
   @Column()
   user_id: number;
 
-  @Column({ type: 'varchar', length: 25, nullable: false })
+  @Column({ type: 'varchar', length: 25, nullable: false, unique: true })
   token: string;
 
   @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens)

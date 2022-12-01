@@ -5,10 +5,8 @@ import {
   Body,
   Param,
   Res,
-  Request,
   HttpStatus,
   Query,
-  UseGuards,
   Render,
 } from '@nestjs/common';
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
@@ -19,7 +17,6 @@ import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { getRestfulResponse } from '@src/common/lib/controller-response.helper';
 import { Response } from 'express';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
-import { JwtAuthGuard } from '@src/common/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -55,13 +52,14 @@ export class AuthV1Controller {
   }
 
   @Post('forgot-password') // Send a token via email to reset the password
-  async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto) {
-    return await this.service.forgotPassword(forgetPasswordDto);
+  async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto, @Res() res: any) {
+    const responseMessage = await this.service.forgotPassword(forgetPasswordDto);
+    getRestfulResponse(res, HttpStatus.OK, responseMessage);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('reset-password') // Change user password
-  async resetPassword(@Body() dto: ResetPasswordV1Dto, @Request() req: any) {
-    return this.service.resetPassword(dto);
+  async resetPassword(@Body() dto: ResetPasswordV1Dto, @Res() res: any) {
+    const data = await this.service.resetPassword(dto);
+    getRestfulResponse(res, HttpStatus.OK, data);
   }
 }

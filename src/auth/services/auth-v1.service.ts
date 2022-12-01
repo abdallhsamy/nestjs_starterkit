@@ -19,7 +19,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
 import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailService } from '@src/common/mail/mail.service';
 
 @Injectable()
 export class AuthV1Service {
@@ -32,7 +32,7 @@ export class AuthV1Service {
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
-    private mailerService: MailerService,
+    private readonly mailService: MailService,
   ) {
     this.authMapper = new AuthMapper();
   }
@@ -47,24 +47,13 @@ export class AuthV1Service {
 
     const verificationToken = await this.createAuthToken(registeredUser, token);
 
-    // todo: send email with verify link
-    // const html = `<p>Hi ${registeredUser.name},</p>
-    //               <p>
-    //                 please click here to verify your email
-    //                 <a href="${config('app.url') + '/v1/auth/verify-email'}" target="_blank">${verificationToken.token}</a>
-    //               </p>`;
-
-    // await this.mailerService.sendMail({
-    //   to: registeredUser.email,
-    //   subject: 'Verify email',
-    //   // template: './email_verification.mail',
-    //   html: html,
-    //   context: {
-    //     name: registeredUser.name,
-    //     url : config('app.url') + '/v1/auth/verify-email',
-    //     token : verificationToken.token
-    //   }
-    // })
+    // if it isn't working so comment the mail request
+    await this.mailService.sendEmailVerificationMail(
+      verificationToken.user,
+      verificationToken.token,
+      'Verify email',
+      '/v1/auth/verify',
+    );
   }
 
   public async login(dto: LoginV1Dto) {
@@ -85,14 +74,14 @@ export class AuthV1Service {
 
   public async verify(token: string) {
     // fetch token data and verify it
-    const VertokenData = await this.emailVerificationTokenRepo.findOneBy({
+    const VerifytokenData = await this.emailVerificationTokenRepo.findOneBy({
       token,
     });
     const isExpired =
-      VertokenData.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
+      VerifytokenData.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
     if (!!isExpired) throw new NotFoundException('Token expired or not found');
 
-    await this.userService.update(VertokenData.user_id, {
+    await this.userService.update(VerifytokenData.user_id, {
       verified_at: new Date(),
     });
     return { message: 'email verified successfully' };
@@ -109,19 +98,29 @@ export class AuthV1Service {
       throw new NotFoundException('No User associated with email ' + dto.email);
     }
 
-    const newToken = {
-      user_id: user.id,
+    const newToken: Object = {
+      user: user,
       token: Math.floor(Math.random() * 90000) + 10000,
     };
-    // this.forgetPassRepo.create(newToken)
+    const forgotPass = await this.forgetPassRepo.create(newToken);
+    const createdForgetPass = await this.forgetPassRepo.save(forgotPass);
+    if (!createdForgetPass) throw new UnprocessableEntityException(
+      "Can't create forget password token"
+    );
+    
+    // if it isn't working so comment the mail request
+    await this.mailService.sendForgetPasswordMail(
+      forgotPass.user,
+      forgotPass.token,
+      'Reset Password email', // subject
+    );
 
-    // send email with token
-
-    // return { "please check your email"};
+    return { message: "please check your email" };
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
-    return 'resetPassword'; // todo : implement resetPassword
+    const hashNewPassword = await encodePassword(dto.password);
+    return await this.userService.update(dto.user_id, { password: hashNewPassword });
   }
 
   private async getUserByKey(key: string, value: any) {
@@ -142,14 +141,9 @@ export class AuthV1Service {
     return user;
   }
 
-  private async createAuthToken(user: any, token: number) {
-    const emailVerificationToken = this.authMapper.createAuthTokenMapper(
-      user,
-      token,
-    );
-
+  private async createAuthToken(user: any, token: any) {
     const createAuthTokenData = await this.emailVerificationTokenRepo.create(
-      emailVerificationToken,
+      { user, token },
     );
 
     await this.emailVerificationTokenRepo.save(createAuthTokenData);
