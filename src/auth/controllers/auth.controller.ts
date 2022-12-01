@@ -52,8 +52,13 @@ export class AuthV1Controller {
   }
 
   @Post('forgot-password') // Send a token via email to reset the password
-  async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto, @Res() res: any) {
-    const responseMessage = await this.service.forgotPassword(forgetPasswordDto);
+  async forgotPassword(
+    @Body() forgetPasswordDto: ForgotPasswordV1Dto,
+    @Res() res: any,
+  ) {
+    const responseMessage = await this.service.forgotPassword(
+      forgetPasswordDto,
+    );
     getRestfulResponse(res, HttpStatus.OK, responseMessage);
   }
 

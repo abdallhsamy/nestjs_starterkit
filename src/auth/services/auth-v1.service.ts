@@ -104,10 +104,11 @@ export class AuthV1Service {
     };
     const forgotPass = await this.forgetPassRepo.create(newToken);
     const createdForgetPass = await this.forgetPassRepo.save(forgotPass);
-    if (!createdForgetPass) throw new UnprocessableEntityException(
-      "Can't create forget password token"
-    );
-    
+    if (!createdForgetPass)
+      throw new UnprocessableEntityException(
+        "Can't create forget password token",
+      );
+
     // if it isn't working so comment the mail request
     await this.mailService.sendForgetPasswordMail(
       forgotPass.user,
@@ -115,12 +116,14 @@ export class AuthV1Service {
       'Reset Password email', // subject
     );
 
-    return { message: "please check your email" };
+    return { message: 'please check your email' };
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
     const hashNewPassword = await encodePassword(dto.password);
-    return await this.userService.update(dto.user_id, { password: hashNewPassword });
+    return await this.userService.update(dto.user_id, {
+      password: hashNewPassword,
+    });
   }
 
   private async getUserByKey(key: string, value: any) {
@@ -142,9 +145,10 @@ export class AuthV1Service {
   }
 
   private async createAuthToken(user: any, token: any) {
-    const createAuthTokenData = await this.emailVerificationTokenRepo.create(
-      { user, token },
-    );
+    const createAuthTokenData = await this.emailVerificationTokenRepo.create({
+      user,
+      token,
+    });
 
     await this.emailVerificationTokenRepo.save(createAuthTokenData);
 
