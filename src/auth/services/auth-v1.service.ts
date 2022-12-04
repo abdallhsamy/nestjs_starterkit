@@ -142,7 +142,9 @@ export class AuthV1Service {
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
-    return 'resetPassword'; // todo : implement resetPassword
+    const userToken = await this.forgetPasswordRepo.findOneBy({token: dto.token});
+    const password = await encodePassword(dto.password);
+    return await this.userService.update(userToken.user_id, { password});
   }
 
   private async getUserByKey(key: string, value: any) {
@@ -163,18 +165,10 @@ export class AuthV1Service {
     return user;
   }
 
-  // private async createAuthToken(user: any, token: number) {
-  //   const emailVerificationToken = this.authMapper.createAuthTokenMapper(
-  //     user,
-  //     token,
-  //   );
-  //
-  //   const createAuthTokenData = await this.emailVerificationTokenRepo.create(
-  //     emailVerificationToken,
-  //   );
-  //
-  //   await this.emailVerificationTokenRepo.save(createAuthTokenData);
-  //
-  //   return createAuthTokenData;
-  // }
+
+  public async logout() {
+    // todo : delete all auth tokens form current user
+
+    return { message: 'successfully logged out'}
+  }
 }

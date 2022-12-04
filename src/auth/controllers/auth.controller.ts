@@ -7,7 +7,6 @@ import {
   Res,
   Request,
   HttpStatus,
-  Query,
   UseGuards, Render
 } from "@nestjs/common";
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
@@ -43,25 +42,29 @@ export class AuthV1Controller {
     getRestfulResponse(res, HttpStatus.OK, data);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('verify-email')
   async verify(@Request() req: any) {
     return await this.service.verify(req.user);
   }
 
-  @Get('resend-verification/:email') // Resend verification email
+  @Get('resend-verification/:email')
   async resendVerification(@Param('email') email: string) {
     return this.service.resendVerification(email);
   }
 
-  @Post('forgot-password') // Send a token via email to reset the password
+  @Post('forgot-password')
   async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto) {
     return await this.service.forgotPassword(forgetPasswordDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('reset-password') // Change user password
+  @Post('reset-password')
   async resetPassword(@Body() dto: ResetPasswordV1Dto, @Request() req: any) {
     return this.service.resetPassword(dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout() {
+    return this.service.logout();
   }
 }
