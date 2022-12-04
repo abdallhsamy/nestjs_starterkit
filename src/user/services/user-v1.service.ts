@@ -1,16 +1,13 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
-import { ApiResponse } from '@lib/errors/api-response';
-import { UserEntity } from '../entities/user.entity';
-import { UserV1Resource } from '../resources/user-v1.resource.js';
-import { NotFoundException } from '@nestjs/common';
-import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
-import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
+import { UserEntity } from "../entities/user.entity";
+import { UserV1Resource } from "../resources/user-v1.resource.js";
+import { NotFoundException } from "@nestjs/common";
+import { CreateUserV1Dto } from "../dto/create-user-v1.dto";
+import { UpdateUserV1Dto } from "../dto/update-user-v1.dto";
 
 export class UserV1Service {
-  constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-  ) {}
+  constructor(@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>) {}
 
   async findAll(query) {
     const filter = {};
@@ -48,15 +45,14 @@ export class UserV1Service {
     const user = await this.userRepo.findOneBy({ id });
     if (!user) throw new NotFoundException();
 
-    return UserV1Resource.single(user);
+    return user;
   }
 
   async findOneByKey(key: string, value: any) {
     const condition = {};
     condition[key] = value;
 
-    const user = await this.userRepo.findOneBy(condition);
-    return user;
+    return await this.userRepo.findOneBy(condition);
   }
 
   async update(id: number, updateUserDto: UpdateUserV1Dto) {
@@ -87,7 +83,7 @@ export class UserV1Service {
       };
     });
 
-    return ApiResponse.successResponse('users', users, 200);
+    return users;
   }
 
   async softDelete(id: number) {
