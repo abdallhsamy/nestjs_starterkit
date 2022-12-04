@@ -24,6 +24,7 @@ import { generateToken } from '@src/common/lib/utils/jwt';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
 import { MailerService } from "@nestjs-modules/mailer";
 import { MailService } from "@src/mail/mail.service";
+import passport from "passport";
 
 @Injectable()
 export class AuthV1Service {
@@ -60,17 +61,20 @@ export class AuthV1Service {
   }
 
   public async login(dto: LoginV1Dto) {
-    const user = await this.getUserByKey('email', dto.email);
+    const user = await this.userService.findOneByKey('email', dto.email);
 
-    if (!bcrypt.compareSync(dto.password, user.password)) {
-      throw new UnprocessableEntityException('Passwords mismatch');
+    if (!user || !bcrypt.compareSync(dto.password, user.password)) {
+      throw new UnprocessableEntityException('email is not found or password is incorrect');
     }
 
-    const userPayload = this.authMapper.prepareUserPayload(user);
+    const userPayload = {
+      sub: user.id,
+      name: user.name,
+    };
 
     const jwt = new JwtService();
 
-    const token = jwt.sign(userPayload, { secret: config('app.secret_key') });
+    const token = jwt.sign(user, { secret: config('app.secret_key') });
 
     return LoginV1Resource.single(user, token);
   }
