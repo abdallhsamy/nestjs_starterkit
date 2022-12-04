@@ -80,10 +80,14 @@ export class AuthV1Service {
   }
 
   public async verify(token: string) {
-    // user_id = db.table('email_verification_tokens').where('token' = 'token).where('created_at' >= DATE('created_at + 10 minutes').limit(1));
-    // user = userentity.findOne(user_id);
-    // user..update.email_verified_at = new Date();
-    // return { "email verified successfully"};
+    const data = await this.emailVerificationTokenRepo.findOneBy({ token });
+
+    const isExpired = data.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
+    if (!!isExpired) throw new NotFoundException('Token expired or not found');
+
+    await this.userService.update(data.user_id, { verified_at: new Date()});
+
+    return { message: 'email verified successfully' };
   }
 
   public async resendVerification(email: string) {
