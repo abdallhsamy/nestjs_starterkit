@@ -22,4 +22,18 @@ export class MailService {
       }
     });
   }
+
+  async sendForgetPasswordMail(user: UserEntity, token: string) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: 'Welcome to ' + config('app.url') + '! Confirm your Email',
+      template: './reset_password.mail', // `.hbs` extension is appended automatically
+      context: {
+        name: user.name,
+        url: config('app.url') + '/v1/auth/verify-email',
+        token: token,
+      },
+    });
+  }
 }

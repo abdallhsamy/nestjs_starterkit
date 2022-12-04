@@ -34,7 +34,7 @@ export class AuthV1Service {
     @InjectRepository(EmailVerificationTokenEntity)
     private emailVerificationTokenRepo: Repository<EmailVerificationTokenEntity>,
     @InjectRepository(ForgetPasswordTokenEntity)
-    private forgetPassRepo: Repository<ForgetPasswordTokenEntity>,
+    private forgetPasswordRepo: Repository<ForgetPasswordTokenEntity>,
     private readonly userService: UserV1Service,
     private readonly forgetPassService: ForgetPasswordV1Service,
     private readonly jwtService: JwtService,
@@ -121,18 +121,24 @@ export class AuthV1Service {
     const user = await this.userService.findOneByKey('email', dto.email);
 
     if (!user) {
-      throw new NotFoundException('No User associated with email ' + dto.email);
+      throw new NotFoundException('No User associated with email : ' + dto.email);
     }
 
-    const newToken = {
+    const forgotPass = await this.forgetPasswordRepo.create({
       user_id: user.id,
-      token: Math.floor(Math.random() * 90000) + 10000,
-    };
-    // this.forgetPassRepo.create(newToken)
+      token: (Math.floor(Math.random() * 90000) + 10000).toString(),
+    });
 
-    // send email with token
+    const createdForgetPass = await this.forgetPasswordRepo.save(forgotPass);
 
-    // return { "please check your email"};
+    if (!createdForgetPass) throw new UnprocessableEntityException("Can't create forget password token");
+
+    await this.mailService.sendForgetPasswordMail(
+      forgotPass.user,
+      forgotPass.token,
+    );
+
+    return { message: 'please check your email' };
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
