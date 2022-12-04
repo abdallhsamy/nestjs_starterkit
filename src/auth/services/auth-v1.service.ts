@@ -12,7 +12,6 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '@src/user/entities/user.entity';
-import { generateRandomText } from '@src/common/lib/utils/random.';
 import { ForgetPasswordV1Service } from './forget-password-v1.service';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import { EmailVerificationTokenEntity } from '@src/auth/entities/email-verification-token.entity';
@@ -20,12 +19,8 @@ import config from '@config/index';
 import * as bcrypt from 'bcrypt';
 import { LoginV1Resource } from '@src/auth/resources/login-v1.resource';
 import { ForgetPasswordTokenEntity } from '@src/auth/entities/forget-password-token.entity';
-import { generateToken } from '@src/common/lib/utils/jwt';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
-import { MailerService } from "@nestjs-modules/mailer";
 import { MailService } from "@src/mail/mail.service";
-import passport from "passport";
-import now = jest.now;
 
 @Injectable()
 export class AuthV1Service {
