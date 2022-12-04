@@ -25,6 +25,7 @@ import { RegisterV1Dto } from '../dto/register-v1.dto';
 import { MailerService } from "@nestjs-modules/mailer";
 import { MailService } from "@src/mail/mail.service";
 import passport from "passport";
+import now = jest.now;
 
 @Injectable()
 export class AuthV1Service {
@@ -80,18 +81,40 @@ export class AuthV1Service {
   }
 
   public async verify(token: string) {
+
+    // todo : if user is authenticated and verified pass this logic
     const data = await this.emailVerificationTokenRepo.findOneBy({ token });
 
     const isExpired = data.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
     if (!!isExpired) throw new NotFoundException('Token expired or not found');
 
+    // todo : delete all tokens;
     await this.userService.update(data.user_id, { verified_at: new Date()});
 
+    // todo : login and return token
     return { message: 'email verified successfully' };
   }
 
   public async resendVerification(email: string) {
-    return 'resendVerification'; // todo : implement resendVerification
+
+    const user = await this.userService.findOneByKey('email', email);
+
+    if (!user) throw new NotFoundException(`no user associated with this email : ${email}`)
+
+    const existingTokens = await this.emailVerificationTokenRepo.findBy({'user_id': user.id});
+
+    let verificationToken;
+
+    if (!existingTokens || !existingTokens.length) {
+      verificationToken = { user_id : user.id, token : (Math.floor(Math.random() * 90000) + 10000).toString()}
+    } else {
+      verificationToken = existingTokens[0]
+      verificationToken.created_at = new Date();
+    }
+
+    await this.emailVerificationTokenRepo.save(verificationToken);
+
+    await this.mailService.sendUserConfirmation(user, verificationToken.token);
   }
 
   public async forgotPassword(dto: ForgotPasswordV1Dto) {

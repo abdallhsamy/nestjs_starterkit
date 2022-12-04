@@ -6,6 +6,6 @@ export class ForgotPasswordV1Dto {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
-  @IsExist(UserEntity)
+  // @IsExist(UserEntity)
   email: string;
 }
