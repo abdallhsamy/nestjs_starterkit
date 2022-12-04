@@ -92,7 +92,6 @@ export class AuthV1Service {
     await this.userService.update(data.user_id, { verified_at: new Date()});
 
     // todo : login and return token
-    return { message: 'email verified successfully' };
   }
 
   public async resendVerification(email: string) {
@@ -137,14 +136,12 @@ export class AuthV1Service {
       forgotPass.user,
       forgotPass.token,
     );
-
-    return { message: 'please check your email' };
   }
 
   public async resetPassword(dto: ResetPasswordV1Dto) {
     const userToken = await this.forgetPasswordRepo.findOneBy({token: dto.token});
     const password = await encodePassword(dto.password);
-    return await this.userService.update(userToken.user_id, { password});
+    await this.userService.update(userToken.user_id, { password});
   }
 
   private async getUserByKey(key: string, value: any) {
@@ -168,7 +165,5 @@ export class AuthV1Service {
 
   public async logout() {
     // todo : delete all auth tokens form current user
-
-    return { message: 'successfully logged out'}
   }
 }
