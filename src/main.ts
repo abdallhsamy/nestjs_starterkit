@@ -12,6 +12,7 @@ import rateLimit from 'express-rate-limit';
 import { join } from 'path';
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import * as express from 'express';
+import { SentryService } from "@ntegral/nestjs-sentry";
 
 
 async function bootstrap() {
@@ -67,6 +68,7 @@ async function bootstrap() {
   });
   app.use('/auth/email/register', createAccountLimiter);
   /******/
+  app.useLogger(SentryService.SentryServiceInstance());
 
   await app.listen(config('app.port'));
 }
