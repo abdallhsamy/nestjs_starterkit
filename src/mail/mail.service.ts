@@ -8,8 +8,6 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: UserEntity, token: string) {
-    const url = config('app.url') + `/v1/auth/verify-email?token=${token}`
-
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
@@ -17,8 +15,9 @@ export class MailService {
       template: './email_verification.mail.hbs', // `.hbs` extension is appended automatically
       context: {
         name: user.name,
-        url : url,
-        token : token
+        url : config('app.url') + `/v1/auth/verify-email?token=${token}`,
+        token : token,
+        app_name : config('app.name')
       }
     });
   }
