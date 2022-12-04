@@ -66,7 +66,7 @@ async function bootstrap() {
     message:
       'Too many accounts created from this IP, please try again after an hour',
   });
-  app.use('/auth/email/register', createAccountLimiter);
+  // app.use('/auth/email/register', createAccountLimiter);
   /******/
   app.useLogger(SentryService.SentryServiceInstance());
 
