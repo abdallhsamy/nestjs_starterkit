@@ -21,7 +21,7 @@ export class ForgetPasswordTokenEntity {
   @Column({ unique: true })
   token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.passwords)
+  @ManyToOne(() => UserEntity, (user) => user.passwords, { onDelete: 'CASCADE' })
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
