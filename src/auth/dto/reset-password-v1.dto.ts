@@ -11,10 +11,6 @@ export class ResetPasswordV1Dto {
 
   @IsString()
   @IsNotEmpty()
-  user_id: number;
-
-  @IsString()
-  @IsNotEmpty()
   password: string;
 
   @IsString()

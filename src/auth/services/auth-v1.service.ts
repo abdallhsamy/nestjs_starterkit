@@ -71,17 +71,15 @@ export class AuthV1Service {
   }
 
   public async verify(token: string) {
-
-    // todo : if user is authenticated and verified pass this logic
     const data = await this.emailVerificationTokenRepo.findOneBy({ token });
-
-    const isExpired = data.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
-    if (!!isExpired) throw new NotFoundException('Token expired or not found');
-
-    // todo : delete all tokens;
-    await this.userService.update(data.user_id, { verified_at: new Date()});
-
-    // todo : login and return token
+    
+    const isExpired = data?.created_at.getTime() + 10 * 60 * 1000 <= Date.now();
+    if (!data || isExpired) throw new NotFoundException('Token expired or not found');
+    
+    // remove all existing verify tokens (not need them any more)
+    await this.emailVerificationTokenRepo.delete({ user_id: data.user_id });
+    
+    await this.userService.update(data.user_id, { verified_at: new Date() });
   }
 
   public async resendVerification(email: string) {
@@ -90,7 +88,7 @@ export class AuthV1Service {
 
     if (!user) throw new NotFoundException(`no user associated with this email : ${email}`)
 
-    const existingTokens = await this.emailVerificationTokenRepo.findBy({'user_id': user.id});
+    const existingTokens = await this.emailVerificationTokenRepo.findBy({ user_id: user.id });
 
     let verificationToken;
 
@@ -103,7 +101,7 @@ export class AuthV1Service {
 
     await this.emailVerificationTokenRepo.save(verificationToken);
 
-    await this.mailService.sendUserConfirmation(user, verificationToken.token);
+    // await this.mailService.sendUserConfirmation(user, verificationToken.token);
   }
 
   public async forgotPassword(dto: ForgotPasswordV1Dto) {
@@ -114,7 +112,7 @@ export class AuthV1Service {
     }
 
     const forgotPass = await this.forgetPasswordRepo.create({
-      user_id: user.id,
+      user: user,
       token: (Math.floor(Math.random() * 90000) + 10000).toString(),
     });
 

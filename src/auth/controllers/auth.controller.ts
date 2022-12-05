@@ -7,7 +7,8 @@ import {
   Request,
   Res,
   HttpStatus,
-  UseGuards, Render
+  UseGuards, Render,
+  Query
 } from "@nestjs/common";
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
 import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
@@ -17,6 +18,8 @@ import { ResetPasswordV1Dto } from '@src/auth/dto/reset-password-v1.dto';
 import { Response } from 'express';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import { JwtAuthGuard } from "@src/common/guards/jwt-auth.guard";
+import { ResendVerificationV1Dto } from "../dto/resend-verification-v1.dto";
+import { VerifyV1Dto } from "../dto/verify-v1.dto";
 
 @ApiBearerAuth()
 @ApiTags('auth')
@@ -41,15 +44,15 @@ export class AuthV1Controller {
   }
 
   @Get('verify-email')
-  async verify(@Request() req: any, @Res() res: Response) {
-    await this.service.verify(req.user);
+  async verify(@Query() query: VerifyV1Dto, @Res() res: Response) {
+    await this.service.verify(query.token);
 
     return res.status(HttpStatus.OK).json({ message: 'email verified successfully' });
   }
 
   @Get('resend-verification/:email')
-  async resendVerification(@Param('email') email: string, @Res() res: Response) {
-    await this.service.resendVerification(email);
+  async resendVerification(@Param() params: ResendVerificationV1Dto, @Res() res: Response) {
+    await this.service.resendVerification(params.email);
 
     return res.status(HttpStatus.OK).json({ message: 'please check your mailboc' });
   }
