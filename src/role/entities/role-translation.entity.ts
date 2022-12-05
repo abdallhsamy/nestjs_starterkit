@@ -26,9 +26,7 @@ export class RoleTranslationEntity {
   @Column({ type: 'varchar', length: 10 })
   lang: string;
 
-  @ManyToOne((type) => RoleEntity, (role: RoleEntity) => role.translations, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne((type) => RoleEntity, (role: RoleEntity) => role.translations, { onDelete: 'CASCADE'})
   @JoinColumn({ name: 'role_id' })
   role: RoleEntity;
 }

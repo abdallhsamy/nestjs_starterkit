@@ -21,11 +21,11 @@ export class ForgetPasswordTokenEntity {
   @Column({ unique: true })
   token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.passwords)
+  @ManyToOne(() => UserEntity, (user) => user.forgetPasswordTokens, { onDelete: 'CASCADE' })
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',
-    foreignKeyConstraintName: 'user_id_fk',
+    foreignKeyConstraintName: 'fk_forget_password_tokens_user_id_users_id',
   })
   user: UserEntity;
 

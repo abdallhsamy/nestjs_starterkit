@@ -8,18 +8,17 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: UserEntity, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
-
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to ' + config('app.url') + '! Confirm your Email',
-      template: './email_verification.mail', // `.hbs` extension is appended automatically
+      subject: 'Welcome to '+config('app.name')+'! Confirm your Email',
+      template: './email_verification.mail.hbs', // `.hbs` extension is appended automatically
       context: {
         name: user.name,
-        url: config('app.url') + '/v1/auth/verify-email',
-        token: token,
-      },
+        url : config('app.url') + `/v1/auth/verify-email?token=${token}`,
+        token : token,
+        app_name : config('app.name')
+      }
     });
   }
 
@@ -27,8 +26,8 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to ' + config('app.url') + '! Confirm your Email',
-      template: './reset_password.mail', // `.hbs` extension is appended automatically
+      subject: 'Welcome to ' + config('app.name') + '! Confirm your Email',
+      template: './reset_password.mail.hbs', // `.hbs` extension is appended automatically
       context: {
         name: user.name,
         url: config('app.url') + '/v1/auth/verify-email',

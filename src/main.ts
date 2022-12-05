@@ -12,6 +12,7 @@ import rateLimit from 'express-rate-limit';
 import { join } from 'path';
 import { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 import * as express from 'express';
+import { SentryService } from "@ntegral/nestjs-sentry";
 
 async function bootstrap() {
   await source.initialize();
@@ -64,8 +65,9 @@ async function bootstrap() {
     message:
       'Too many accounts created from this IP, please try again after an hour',
   });
-  app.use('/auth/email/register', createAccountLimiter);
+  // app.use('/auth/email/register', createAccountLimiter);
   /******/
+  app.useLogger(SentryService.SentryServiceInstance());
 
   await app.listen(config('app.port'));
 }
