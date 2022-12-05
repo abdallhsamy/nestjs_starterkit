@@ -58,14 +58,15 @@ export class UserEntity {
     () => EmailVerificationTokenEntity,
     (emailVerificationToken) => emailVerificationToken.user,
     {
-      onDelete: "CASCADE"
-  })
+      onDelete: 'CASCADE',
+    },
+  )
   emailVerificationTokens: EmailVerificationTokenEntity[];
 
   @Exclude()
   @OneToMany(
     () => ForgetPasswordTokenEntity,
-    (forgetPasswordToken) => forgetPasswordToken.user
+    (forgetPasswordToken) => forgetPasswordToken.user,
   )
   forgetPasswordTokens: ForgetPasswordTokenEntity[];
 

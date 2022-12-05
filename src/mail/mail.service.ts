@@ -11,14 +11,14 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to '+config('app.name')+'! Confirm your Email',
+      subject: 'Welcome to ' + config('app.name') + '! Confirm your Email',
       template: './email_verification.mail.hbs', // `.hbs` extension is appended automatically
       context: {
         name: user.name,
-        url : config('app.url') + `/v1/auth/verify-email?token=${token}`,
-        token : token,
-        app_name : config('app.name')
-      }
+        url: config('app.url') + `/v1/auth/verify-email?token=${token}`,
+        token: token,
+        app_name: config('app.name'),
+      },
     });
   }
 

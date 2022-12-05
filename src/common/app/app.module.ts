@@ -12,8 +12,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PermissionModule } from '@src/permission/permission.module';
 import { UserModule } from '@src/user/user.module';
 import { AuthModule } from '@src/auth/auth.module';
-import { SentryModule } from "@ntegral/nestjs-sentry";
-import config from "@config/index";
+import { SentryModule } from '@ntegral/nestjs-sentry';
+import config from '@config/index';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import config from "@config/index";
       debug: true,
       environment: 'dev',
       // release: null, // must create a release in sentry.io dashboard
-      logLevels: ['debug'] //based on sentry.io loglevel //
+      logLevels: ['debug'], //based on sentry.io loglevel //
     }),
     TypeOrmModule.forRoot(ormOptions),
     AuthModule,

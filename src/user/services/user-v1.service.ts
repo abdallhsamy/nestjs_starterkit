@@ -1,14 +1,16 @@
-import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository } from "typeorm";
-import { UserEntity } from "../entities/user.entity";
-import { UserV1Resource } from "../resources/user-v1.resource.js";
-import { NotFoundException } from "@nestjs/common";
-import { CreateUserV1Dto } from "../dto/create-user-v1.dto";
-import { UpdateUserV1Dto } from "../dto/update-user-v1.dto";
-import { RegisterV1Dto } from "@src/auth/dto/register-v1.dto";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Like, Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
+import { UserV1Resource } from '../resources/user-v1.resource.js';
+import { NotFoundException } from '@nestjs/common';
+import { CreateUserV1Dto } from '../dto/create-user-v1.dto';
+import { UpdateUserV1Dto } from '../dto/update-user-v1.dto';
+import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
 
 export class UserV1Service {
-  constructor(@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>) {}
+  constructor(
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+  ) {}
 
   async findAll(query) {
     const filter = {};

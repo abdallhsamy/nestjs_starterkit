@@ -21,7 +21,9 @@ export class EmailVerificationTokenEntity {
   @Column({ type: 'varchar', length: 25, nullable: false, unique: true })
   token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.emailVerificationTokens, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',
