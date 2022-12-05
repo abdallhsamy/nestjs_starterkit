@@ -25,7 +25,7 @@ export class EmailVerificationTokenEntity {
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',
-    foreignKeyConstraintName: 'user_id_fk',
+    foreignKeyConstraintName: 'fk_email_verification_tokens_user_id_users_id',
   })
   user: UserEntity;
 

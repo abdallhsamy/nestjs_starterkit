@@ -21,7 +21,12 @@ export class ForgetPasswordTokenEntity {
   @Column({ unique: true })
   token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.passwords, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.forgetPasswordTokens, { onDelete: 'CASCADE' })
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_forget_password_tokens_user_id_users_id',
+  })
   user: UserEntity;
 
   @CreateDateColumn({ name: 'created_at', nullable: true })

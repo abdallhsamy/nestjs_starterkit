@@ -62,12 +62,12 @@ export class RoleEntity {
     joinColumn: {
       name: 'role_id',
       referencedColumnName: 'id',
-      foreignKeyConstraintName: 'role_id_fk',
+      foreignKeyConstraintName: 'fk_permission_role_role_id_roles_id',
     },
     inverseJoinColumn: {
       name: 'permission_id',
       referencedColumnName: 'id',
-      foreignKeyConstraintName: 'permission_id_fk',
+      foreignKeyConstraintName: 'fk_permission_role_permission_id_permissions_id',
     },
   })
   permissions: PermissionEntity[];
