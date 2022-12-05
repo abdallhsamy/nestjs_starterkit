@@ -65,7 +65,7 @@ export class AuthV1Service {
 
     const jwt = new JwtService();
 
-    const token = jwt.sign(user, { secret: config('app.secret_key') });
+    const token = jwt.sign(userPayload, { secret: config('app.secret_key') });
 
     return LoginV1Resource.single(user, token);
   }
