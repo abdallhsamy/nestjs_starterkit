@@ -150,8 +150,7 @@ export class AuthV1Service {
     return user;
   }
 
-
-  public async logout() {
-    // todo : delete all auth tokens form current user
+  public logout(req: any) {
+    req.res.setHeader('Authorization', null);
   }
 }

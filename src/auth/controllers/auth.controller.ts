@@ -72,10 +72,9 @@ export class AuthV1Controller {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('logout')
+  @Get('logout')
   async logout(@Request() req: any, @Res() res: Response) {
-    await this.service.logout();
-
+    this.service.logout(req);
     return res.status(HttpStatus.OK).json({ message : 'successfully logged out' });
   }
 }
