@@ -54,7 +54,12 @@ export class UserEntity {
   deleted_at: Date;
 
   @Exclude()
-  @OneToMany(() => EmailVerificationTokenEntity, (emailVerificationToken) => emailVerificationToken.user)
+  @OneToMany(
+    () => EmailVerificationTokenEntity,
+    (emailVerificationToken) => emailVerificationToken.user,
+    {
+      onDelete: "CASCADE"
+  })
   emailVerificationTokens: EmailVerificationTokenEntity[];
 
   @Exclude()
