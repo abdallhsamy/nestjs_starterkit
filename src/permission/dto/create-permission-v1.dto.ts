@@ -1,7 +1,4 @@
-import {
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { PermissionActionsEnum } from '@src/permission/enums/permission-actions.enum';
 
 export class CreatePermissionV1Dto {

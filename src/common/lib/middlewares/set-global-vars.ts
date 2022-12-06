@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 
 config();
 
-
 @Injectable()
 export class SetGlobalVarsMiddleware implements NestMiddleware {
   async use(req: Request, res: Response<any>, next: () => any): Promise<any> {

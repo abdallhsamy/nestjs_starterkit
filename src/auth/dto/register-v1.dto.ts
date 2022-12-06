@@ -2,14 +2,15 @@ import { Match } from '@src/common/lib/decorators/is-match.decorator';
 import { Unique } from '@src/common/lib/decorators/is-unique.decorator';
 import { UserEntity } from '@src/user/entities/user.entity';
 import {
-  IsDate, IsDateString,
+  IsDate,
+  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
-  IsString
-} from "class-validator";
-import { Type } from "class-transformer";
+  IsString,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class RegisterV1Dto {
   @IsString()
@@ -35,7 +36,6 @@ export class RegisterV1Dto {
   @IsPhoneNumber()
   @Unique(UserEntity)
   phone_number: string;
-
 
   @IsDate()
   @Type(() => Date)

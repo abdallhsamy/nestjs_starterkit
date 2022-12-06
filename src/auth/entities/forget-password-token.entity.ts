@@ -21,7 +21,9 @@ export class ForgetPasswordTokenEntity {
   @Column({ unique: true })
   token: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.forgetPasswordTokens, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.forgetPasswordTokens, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',

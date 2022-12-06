@@ -7,8 +7,9 @@ import {
   Res,
   Request,
   HttpStatus,
-  UseGuards, Render
-} from "@nestjs/common";
+  UseGuards,
+  Render,
+} from '@nestjs/common';
 import { AuthV1Service } from '@src/auth/services/auth-v1.service';
 import { RegisterV1Dto } from '@src/auth/dto/register-v1.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -30,7 +31,9 @@ export class AuthV1Controller {
   async register(@Body() dto: RegisterV1Dto, @Res() res: Response) {
     await this.service.register(dto);
 
-    return res.status(HttpStatus.CREATED).json({ message : 'account registered successfully, please check your email' });
+    return res.status(HttpStatus.CREATED).json({
+      message: 'account registered successfully, please check your email',
+    });
   }
 
   @Post('login')
@@ -44,28 +47,46 @@ export class AuthV1Controller {
   async verify(@Request() req: any, @Res() res: Response) {
     await this.service.verify(req.user);
 
-    return res.status(HttpStatus.OK).json({ message: 'email verified successfully' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'email verified successfully' });
   }
 
   @Get('resend-verification/:email')
-  async resendVerification(@Param('email') email: string, @Res() res: Response) {
+  async resendVerification(
+    @Param('email') email: string,
+    @Res() res: Response,
+  ) {
     await this.service.resendVerification(email);
 
-    return res.status(HttpStatus.OK).json({ message: 'please check your mailboc' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'please check your mailbox' });
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body() forgetPasswordDto: ForgotPasswordV1Dto, @Res() res: Response) {
+  async forgotPassword(
+    @Body() forgetPasswordDto: ForgotPasswordV1Dto,
+    @Res() res: Response,
+  ) {
     await this.service.forgotPassword(forgetPasswordDto);
 
-    return res.status(HttpStatus.OK).json({ message: 'please check your email' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'please check your email' });
   }
 
   @Post('reset-password')
-  async resetPassword(@Body() dto: ResetPasswordV1Dto, @Request() req: any, @Res() res: Response) {
+  async resetPassword(
+    @Body() dto: ResetPasswordV1Dto,
+    @Request() req: any,
+    @Res() res: Response,
+  ) {
     await this.service.resetPassword(dto);
 
-    return res.status(HttpStatus.OK).json({ message : 'password changed successfully' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'password changed successfully' });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -73,6 +94,8 @@ export class AuthV1Controller {
   async logout(@Request() req: any, @Res() res: Response) {
     await this.service.logout();
 
-    return res.status(HttpStatus.OK).json({ message : 'successfully logged out' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'successfully logged out' });
   }
 }
