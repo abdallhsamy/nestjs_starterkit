@@ -4,16 +4,15 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { RoleModule } from '@src/role/role.module';
-import { ormOptions } from '@src/ormconfig';
+import { RoleModule } from '@src/modules/role/role.module';
+import { ormOptions } from '@src/common/ormconfig';
 import { SetGlobalVarsMiddleware } from '@lib/middlewares/set-global-vars';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { PermissionModule } from '@src/permission/permission.module';
-import { UserModule } from '@src/user/user.module';
-import { AuthModule } from '@src/auth/auth.module';
 import { SentryModule } from '@ntegral/nestjs-sentry';
 import config from '@config/index';
+import { UserModule } from '@src/modules/user/user.module';
+import { AuthModule } from '@src/modules/auth/auth.module';
+import { PermissionModule } from '@src/modules/permission/permission.module';
 
 @Module({
   imports: [

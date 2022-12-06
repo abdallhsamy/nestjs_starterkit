@@ -4,8 +4,8 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ormOptions } from '@src/ormconfig';
-import { UserEntity } from '@src/user/entities/user.entity';
+import { UserEntity } from '@src/modules/user/entities/user.entity';
+import { ormOptions } from '@src/common/ormconfig';
 import { Request, Response, NextFunction } from 'express';
 import { DataSource } from 'typeorm';
 
@@ -23,7 +23,7 @@ export class VerifyMiddleware implements NestMiddleware {
       .findOneBy({ email: req.body.email });
     if (!user.verified_at)
       throw new UnauthorizedException(
-        "You should verify your account first before proceeding",
+        'You should verify your account first before proceeding',
       );
     next();
   }
