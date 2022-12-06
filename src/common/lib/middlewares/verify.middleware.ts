@@ -23,7 +23,7 @@ export class VerifyMiddleware implements NestMiddleware {
       .findOneBy({ email: req.body.email });
     if (!user.verified_at)
       throw new UnauthorizedException(
-        "Can't login, you should verify your account first",
+        "You should verify your account first before proceeding",
       );
     next();
   }
