@@ -1,5 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { ormOptions } from '@src/ormconfig';
+import { ormOptions } from '@src/common/ormconfig';
 import {
   registerDecorator,
   ValidationArguments,

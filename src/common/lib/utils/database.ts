@@ -1,5 +1,5 @@
 import { Like } from 'typeorm';
-import dataSource from '@src/ormconfig';
+import dataSource from '@src/common/ormconfig';
 
 // this function transform filters sent by user to object to make a query
 export const manipulateFiltersParams = (filters: Object): Object => {
