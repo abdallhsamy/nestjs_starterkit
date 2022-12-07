@@ -1,11 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { config } from 'dotenv';
-import { ConfigService } from '@nestjs/config';
 
 config();
-
-const configService = new ConfigService();
 
 @Injectable()
 export class SetGlobalVarsMiddleware implements NestMiddleware {

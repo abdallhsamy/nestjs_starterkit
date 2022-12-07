@@ -15,5 +15,7 @@ export default {
 
   mail_from: configService.get('MAIL_FROM') || configService.get('APP_NAME'),
 
+  port: +configService.get('MAIL_PORT') || 2525,
+
   template_dir: '../../../views',
 };
