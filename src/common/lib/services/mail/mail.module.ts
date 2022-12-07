@@ -4,7 +4,6 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
 import config from '@config/index';
-
 @Module({
   imports: [
     MailerModule.forRoot({

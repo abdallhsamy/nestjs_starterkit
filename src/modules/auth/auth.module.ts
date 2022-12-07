@@ -6,7 +6,7 @@ import { LocalStrategy } from '@src/common/strategies/local.strategy';
 import { ForgetPasswordV1Service } from './services/forget-password-v1.service';
 import config from '@src/common/config';
 import { JwtStrategy } from '@src/common/strategies/jwt.strategy';
-import { MailModule } from '@src/common/lib/mail/mail.module';
+import { MailModule } from '@src/common/lib/services/mail/mail.module';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserV1Service } from '../user/services/user-v1.service';
 import { UserModule } from '../user/user.module';
