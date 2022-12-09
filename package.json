@@ -1,8 +1,8 @@
 {
   "name": "nest_app",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "NestJs App Starterkit",
+  "author": "Abdallah Samy",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -95,5 +95,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines" : {
+    "npm" : ">=8.19.3 <9.0.0",
+    "node" : ">=19.2.0 <20.0.0"
   }
 }
