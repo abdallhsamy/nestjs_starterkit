@@ -28,7 +28,7 @@ import { AuthV1Service } from './services/auth-v1.service';
     PassportModule,
     PassportModule.register({ session: false, defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: config('app.secret_key'),
+      secret: config('app.secret_key', 'SECRET_KEY'),
       signOptions: { expiresIn: config('app.token_expire') },
     }),
   ],
