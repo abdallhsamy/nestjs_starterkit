@@ -1,13 +1,30 @@
+#dist: focal
 language: node_js
 node_js:
  - "stable"
+ - '14.21.1'
+ - '16.18.1'
+ - '18.12.1'
+
+os:
+ - linux
+
 cache:
-  directories:
-  - node_modules
-  - '$HOME/.npm'
+ directories:
+  - ./node_modules
+
+services:
+ - docker
+
 install:
-  - npm insall
+ - npm ci --no-progress
+
 script:
-  - npm run build
-  - npm run test
-  - npm run lint
+ - npm run lint
+ - npm run prettier:check
+ - npm run test
+ - cp .env.dist .env
+ - docker-compose up -d --build postgres
+ - docker ps -a
+ - npm run test:e2e
+ - npm run build
