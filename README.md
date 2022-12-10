@@ -1,8 +1,8 @@
-## nest app
+# nestJs StarterKit
 <p align="center">
   <a href="https://nestjs.com/" target="blank"><img src="https://github.com/nestjs/docs.nestjs.com/blob/master/src/assets/logo-small.svg" height="100" alt="Nest logo" /></a>
   <a href="https://typeorm.io/" target="blank"><img src="https://avatars.githubusercontent.com/u/20165699" height="100" alt="TypeORM logo" /></a>
-  <a href="https://www.postgresql.org/" target="blank"><img src="https://www.postgresql.org/media/img/about/press/elephant.png" height="100" alt="PostgreSQL logo" /></a>
+  <a href="https://www.mysql.com/" target="blank"><img src="https://pngimg.com/uploads/mysql/mysql_PNG29.png" height="100" alt="PostgreSQL logo" /></a>
   <a href="https://jestjs.io/" target="blank"><img src="https://github.com/facebook/jest/blob/main/website/static/img/jest.png" height="100" alt="Jest logo" /></a>
   <a href="https://prettier.io/" target="blank"><img src="https://github.com/prettier/prettier/blob/main/website/static/icon.png" height="100" alt="Prettier logo" /></a>
   <a href="https://eslint.org/" target="blank"><img src="https://github.com/eslint/website/blob/master/assets/img/logo.svg" height="100" alt="ESLint logo" /></a>
@@ -15,7 +15,6 @@
   <a href="https://www.travis-ci.com/" target="blank"><img src="https://www.vectorlogo.zone/logos/travis-ci/travis-ci-icon.svg" height="60" alt="Travis CI logo" /></a>
 </p>
 
-# Nest - Boilerplate
 
 [![GitHub CI](https://github.com/abdallhsamy/nestjs_starterkit/workflows/CI/badge.svg)](https://github.com/abdallhsamy/nestjs_starterkit/actions?query=workflow%3ACI)
 [![CircleCI](https://circleci.com/gh/abdallhsamy/nestjs_starterkit.svg?style=svg)](https://circleci.com/gh/abdallhsamy/nestjs_starterkit)
@@ -67,7 +66,7 @@ What things you need to install the software and how to install them :
 
 - [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/)
-- [Docker](https://docs.docker.com/docker-for-windows/install/) or [Docker Toolbox](https://github.com/docker/toolbox/releases)
+- [Docker](https://docs.docker.com/docker-for-windows/install/)
 - [Nest CLI](https://docs.nestjs.com/cli/overview)
 
 ---
@@ -160,8 +159,8 @@ Are you a good `commitizen` ?
 
 Containers :
 
-- PostgreSQL 14
-- pgAdmin 6
+- MySQL 8
+- phpMyAdmin 5
 
 Compose file uses `.env`.
 
