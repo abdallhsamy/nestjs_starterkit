@@ -160,8 +160,8 @@ Are you a good `commitizen` ?
 
 Containers :
 
-- PostgreSQL 14
-- pgAdmin 6
+- MySQL 8
+- phpMyAdmin 5
 
 Compose file uses `.env`.
 
