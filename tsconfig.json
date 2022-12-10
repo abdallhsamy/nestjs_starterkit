@@ -23,13 +23,13 @@
       "@common/*": ["./src/common/*"],
       "@app/*": ["./src/common/app/*"],
       "@config/*": ["./src/common/config/*"],
-      "@constants/*":  ["./src/common/constants/*"],
+      "@constants/*": ["./src/common/constants/*"],
       "@exceptions/*": ["./src/common/exceptions/*"],
-      "@lang/*":  ["./src/common/lang/*"],
+      "@lang/*": ["./src/common/lang/*"],
       "@lib/*": ["./src/common/lib/*"],
-      "@middlewares/*":  ["./src/common/middlewares/*"],
-      "@roles/*":  ["./src/common/roles/*"],
-      "@strategies/*":  ["./src/common/strategies/*"]
+      "@middlewares/*": ["./src/common/middlewares/*"],
+      "@roles/*": ["./src/common/roles/*"],
+      "@strategies/*": ["./src/common/strategies/*"]
     }
   }
 }
