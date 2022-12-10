@@ -1,5 +1,5 @@
-import { IsExist } from '@src/common/lib/decorators/is-exist.decorator';
-import { Match } from '@src/common/lib/decorators/is-match.decorator';
+import { IsExist } from '@lib/decorators/is-exist.decorator';
+import { Match } from '@lib/decorators/is-match.decorator';
 import { IsString, IsNotEmpty } from 'class-validator';
 import { ForgetPasswordTokenEntity } from '../entities/forget-password-token.entity';
 

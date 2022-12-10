@@ -14,7 +14,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
-import { JwtAuthGuard } from '@src/common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 import { ResendVerificationV1Dto } from '../dto/resend-verification-v1.dto';
 import { VerifyV1Dto } from '../dto/verify-v1.dto';
 import { LoginV1Dto } from '../dto/login-v1.dto';

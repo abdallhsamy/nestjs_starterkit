@@ -1,6 +1,10 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-config-prettier","tslint-clean-code"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier",
+    "tslint-clean-code"
+  ],
   "jsRules": {
     "no-unused-expression": true
   },

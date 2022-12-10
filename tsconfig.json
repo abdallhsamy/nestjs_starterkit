@@ -19,16 +19,18 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@src/*": ["./src/*"],
+      "@modules/*": ["./src/modules/*"],
       "@common/*": ["./src/common/*"],
       "@app/*": ["./src/common/app/*"],
       "@config/*": ["./src/common/config/*"],
-      "@constants/*":  ["./src/common/constants/*"],
+      "@constants/*": ["./src/common/constants/*"],
       "@exceptions/*": ["./src/common/exceptions/*"],
-      "@lang/*":  ["./src/common/lang/*"],
+      "@guards/*": ["./src/common/guards/*"],
+      "@lang/*": ["./src/common/lang/*"],
       "@lib/*": ["./src/common/lib/*"],
-      "@middlewares/*":  ["./src/common/middlewares/*"],
-      "@roles/*":  ["./src/common/roles/*"],
-      "@strategies/*":  ["./src/common/strategies/*"]
+      "@middlewares/*": ["./src/common/middlewares/*"],
+      "@roles/*": ["./src/common/roles/*"],
+      "@strategies/*": ["./src/common/strategies/*"]
     }
   }
 }
