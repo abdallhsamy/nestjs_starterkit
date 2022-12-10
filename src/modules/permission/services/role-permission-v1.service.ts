@@ -6,7 +6,7 @@ export class RolePermissionV1Service {
   constructor(private readonly permissionService: PermissionV1Service) {}
 
   async assignPermissionsToRoles(role: RoleEntity, permissionsIds: number[]) {
-    // check existance of permissions with their ids
+    // check existence of permissions with their ids
     const permissions = await this.permissionService.getPermissionsByIds(
       permissionsIds,
     );

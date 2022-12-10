@@ -11,7 +11,7 @@ export class ForgetPasswordV1Service {
   ) {}
 
   public async forgetPassword(forgetPasswordRequest: any) {
-    const forgetPass = await this.forgetPassRepo.create(forgetPasswordRequest);
+    const forgetPass = this.forgetPassRepo.create(forgetPasswordRequest);
     return await this.forgetPassRepo.save(forgetPass);
   }
 }

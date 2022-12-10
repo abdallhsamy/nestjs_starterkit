@@ -10,7 +10,7 @@ import { MailModule } from '@src/common/lib/services/mail/mail.module';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserV1Service } from '../user/services/user-v1.service';
 import { UserModule } from '../user/user.module';
-import { AuthV1Controller } from './controllers/auth.controller';
+import { AuthV1Controller } from './controllers/auth-v1.controller';
 import { EmailVerificationTokenEntity } from './entities/email-verification-token.entity';
 import { ForgetPasswordTokenEntity } from './entities/forget-password-token.entity';
 import { AuthV1Service } from './services/auth-v1.service';
