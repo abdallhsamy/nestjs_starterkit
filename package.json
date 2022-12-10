@@ -13,12 +13,20 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && npm run eslint:check && npm run prettier:check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "eslint:check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "eslint:fix": "npm run eslint:check -- --fix",
+    "precommit": "lint-staged && npm run lint && npm run test",
+    "prepare": "husky install",
+    "prepush": "npm run test",
+    "prettier:check": "prettier --check ./**/*.{ts,js,json,*rc}",
+    "prettier:write": "prettier --write ./**/*.{ts,js,json,*rc}",
+    "sort-package-json": "npx sort-package-json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
