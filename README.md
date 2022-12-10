@@ -66,7 +66,7 @@ What things you need to install the software and how to install them :
 
 - [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/)
-- [Docker](https://docs.docker.com/docker-for-windows/install/) or [Docker Toolbox](https://github.com/docker/toolbox/releases)
+- [Docker](https://docs.docker.com/docker-for-windows/install/)
 - [Nest CLI](https://docs.nestjs.com/cli/overview)
 
 ---
