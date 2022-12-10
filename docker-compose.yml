@@ -22,7 +22,7 @@ services:
     ports:
       - '${APP_PORT:-80}:80'
     volumes:
-      - .:/src
+      - .:/src/app
     networks:
       - nest
     depends_on:
