@@ -1,4 +1,4 @@
-import { encodePassword } from '@src/common/lib/utils/bcrypt';
+import { encodePassword } from '@lib/utils/bcrypt';
 import { UserEntity } from '@src/modules/user/entities/user.entity';
 import { EmailVerificationTokenEntity } from '../entities/email-verification-token.entity';
 

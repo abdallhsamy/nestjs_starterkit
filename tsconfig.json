@@ -25,6 +25,7 @@
       "@config/*": ["./src/common/config/*"],
       "@constants/*": ["./src/common/constants/*"],
       "@exceptions/*": ["./src/common/exceptions/*"],
+      "@guards/*": ["./src/common/guards/*"],
       "@lang/*": ["./src/common/lang/*"],
       "@lib/*": ["./src/common/lib/*"],
       "@middlewares/*": ["./src/common/middlewares/*"],

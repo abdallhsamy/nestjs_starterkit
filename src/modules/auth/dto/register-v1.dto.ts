@@ -1,5 +1,5 @@
-import { Match } from '@src/common/lib/decorators/is-match.decorator';
-import { Unique } from '@src/common/lib/decorators/is-unique.decorator';
+import { Match } from '@lib/decorators/is-match.decorator';
+import { Unique } from '@lib/decorators/is-unique.decorator';
 import {
   IsDate,
   IsEmail,

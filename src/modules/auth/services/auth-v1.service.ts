@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { comparePasswords, encodePassword } from '@src/common/lib/utils/bcrypt';
+import { comparePasswords, encodePassword } from '@lib/utils/bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,7 +11,7 @@ import { ForgotPasswordV1Dto } from '../dto/forgot-password-v1.dto';
 import config from '@config/index';
 import * as bcrypt from 'bcrypt';
 import { RegisterV1Dto } from '../dto/register-v1.dto';
-import { MailService } from '@src/common/lib/services/mail/mail.service';
+import { MailService } from '@lib/services/mail/mail.service';
 import { UserV1Service } from '@src/modules/user/services/user-v1.service';
 import { LoginV1Dto } from '../dto/login-v1.dto';
 import { ResetPasswordV1Dto } from '../dto/reset-password-v1.dto';
