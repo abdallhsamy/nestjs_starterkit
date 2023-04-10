@@ -59,7 +59,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@ntegral/nestjs-sentry": "^4.0.0",
     "@sentry/node": "^7.24.2",
-    "aws-sdk": "^2.1272.0",
+    "aws-sdk": "^2.1354.0",
     "bcrypt": "^5.1.0",
     "cache-manager": "^5.1.4",
     "class-transformer": "^0.5.1",
@@ -75,7 +75,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.14"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
