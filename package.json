@@ -58,7 +58,7 @@
     "@nestjs/swagger": "^6.1.4",
     "@nestjs/typeorm": "^9.0.1",
     "@ntegral/nestjs-sentry": "^4.0.0",
-    "@sentry/node": "^7.24.2",
+    "@sentry/node": "^7.53.0",
     "aws-sdk": "^2.1272.0",
     "bcrypt": "^5.1.0",
     "cache-manager": "^5.1.4",
